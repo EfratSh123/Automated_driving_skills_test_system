@@ -1,0 +1,3 @@
+C:/Users/User/ProjectEfratSh/API_new/build/CMakeFiles/google_maps_app.dir
+C:/Users/User/ProjectEfratSh/API_new/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/User/ProjectEfratSh/API_new/build/CMakeFiles/ZERO_CHECK.dir

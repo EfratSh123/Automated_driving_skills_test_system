@@ -1,0 +1,103 @@
+#include <iostream>
+#include <vector>
+#include <Eigen/Dense> // ספרייה לאלגברה לינארית
+
+// מרחב שמות לשימוש נוח ב-Eigen
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
+
+// פונקציה לביצוע חישוב מסנן קלמן
+std::vector<double> kalmanFilter(
+    const std::vector<double>& measurements_x, // מדידות של קואורדינטת x
+    const std::vector<double>& measurements_y, // מדידות של קואורדינטת y
+    double initial_x,                       // הערכה התחלתית של x
+    double initial_y,                       // הערכה התחלתית של y
+    double process_noise_x,                 // רעש התהליך עבור x
+    double process_noise_y,                 // רעש התהליך עבור y
+    double measurement_noise_x,             // רעש המדידה עבור x
+    double measurement_noise_y)             // רעש המדידה עבור y
+{
+    // 1. הגדרת מטריצות ווקטורים
+
+    // מטריצת מצב: [x, y, vx, vy] (מיקום ומהירות)
+    VectorXd state(4);
+    state << initial_x, initial_y, 0, 0; // מהירות התחלתית היא 0
+
+    // מטריצת קוואריאנס של שגיאת התהליך (Q)
+    MatrixXd process_covariance(4, 4);
+    process_covariance << process_noise_x, 0, 0, 0,
+                          0, process_noise_y, 0, 0,
+                          0, 0, 0.1, 0, // רעש קטן למהירות
+                          0, 0, 0, 0.1;
+
+    // מטריצת קוואריאנס של שגיאת המדידה (R)
+    MatrixXd measurement_covariance(2, 2);
+    measurement_covariance << measurement_noise_x, 0,
+                            0, measurement_noise_y;
+
+    // מטריצת מעבר מצב (F) - מניחה מהירות קבועה
+    MatrixXd state_transition(4, 4);
+    state_transition << 1, 0, 1, 0,
+                      0, 1, 0, 1,
+                      0, 0, 1, 0,
+                      0, 0, 0, 1;
+
+    // מטריצת מדידה (H) - מתרגמת את מצב המערכת למדידות
+    MatrixXd measurement_matrix(2, 4);
+    measurement_matrix << 1, 0, 0, 0,
+                        0, 1, 0, 0;
+
+    // מטריצת קוואריאנס של השגיאה (P)
+    MatrixXd error_covariance = MatrixXd::Identity(4, 4);
+
+    // וקטור מדידה (z)
+    VectorXd measurement(2);
+
+    // וקטור לתוצאות המשוערכות
+    std::vector<double> estimated_x;
+    std::vector<double> estimated_y;
+
+    // 2. לולאה על המדידות
+    for (size_t i = 0; i < measurements_x.size(); ++i) {
+        measurement << measurements_x[i], measurements_y[i];
+
+        // 3. שלב החיזוי
+        state = state_transition * state;
+        error_covariance = state_transition * error_covariance * state_transition.transpose() + process_covariance;
+
+        // 4. שלב העדכון
+        VectorXd innovation = measurement - measurement_matrix * state;
+        MatrixXd innovation_covariance = measurement_matrix * error_covariance * measurement_matrix.transpose() + measurement_covariance;
+        MatrixXd kalman_gain = error_covariance * measurement_matrix.transpose() * innovation_covariance.inverse();
+        state = state + kalman_gain * innovation;
+        error_covariance = (MatrixXd::Identity(4, 4) - kalman_gain * measurement_matrix) * error_covariance;
+
+        // שמירת התוצאות המשוערכות
+        estimated_x.push_back(state(0));
+        estimated_y.push_back(state(1));
+    }
+    
+    std::vector<double> result;
+    result.push_back(estimated_x[estimated_x.size()-1]);
+    result.push_back(estimated_y[estimated_y.size()-1]);
+    return result;
+}
+
+int main() {
+    // דוגמה לשימוש
+    std::vector<double> measurement_x = { 1.0, 1.2, 1.4, 1.6, 1.8, 2.0 };
+    std::vector<double> measurement_y = { 1.1, 1.3, 1.5, 1.7, 1.9, 2.1 };
+    double initial_x = 0.9;
+    double initial_y = 1.0;
+    double process_noise_x = 0.1;
+    double process_noise_y = 0.1;
+    double measurement_noise_x = 0.2;
+    double measurement_noise_y = 0.2;
+
+    std::vector<double> estimated_position = kalmanFilter(measurement_x, measurement_y, initial_x, initial_y, process_noise_x, process_noise_y, measurement_noise_x, measurement_noise_y);
+
+    std::cout << "Estimated X: " << estimated_position[0] << std::endl;
+    std::cout << "Estimated Y: " << estimated_position[1] << std::endl;
+
+    return 0;
+}
