@@ -1,0 +1,37 @@
+API_new/vcpkg
+boost_1_87_0/
+caffe-master/
+cmake-3.31.4-windows-x86_64/
+fasterRcnn/
+!fasterRcnn/dataset_new/trafics_dataset/faster_R-CNN_try_good_files.py
+!fasterRcnn/dataset_new/trafics_dataset/New Text Document.txt
+google_maps_API/
+!google_maps_API/google_maps_cpp/
+jdk-23_linux-aarch64_bin/
+Lane_Line_Detection/
+lane-detection-with-opencv-master(1)/
+!lane-detection-with-opencv-master(1)/lane-detection-with-opencv-master/
+LLVM/
+OpevCV/
+tf2.9_env/
+YOLO/
+!YOLO/Crosswalk_and_Pedestrians_dataset/runs/
+!YOLO/Crosswalk_and_Pedestrians_dataset/try_model/
+kelman-filter/.vs/
+!YOLO/Crosswalk_and_Pedestrians_dataset/trin_YOLO.py
+!YOLO/Crosswalk_and_Pedestrians_dataset/try_model_video.py
+!YOLO/Crosswalk_and_Pedestrians_dataset/yaml.yaml
+!YOLO/yolo_try_good_txt_files.py
+abc.txt
+C.docx
+cacert.pem
+cudnnVerion.txt
+curl-8.11.1.tar.gz
+github-cert.pem
+GPUversion.txt
+GPUversionPyTorch.txt
+project PowerPoint.pptx
+test.py
+test_gz_2025-0.0.1.tar.gz
+traffic-light-detection-dataset-metadata.json
+תיעוד השלבים להתקנת PyTorch.docx
