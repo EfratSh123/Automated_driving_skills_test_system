@@ -26,11 +26,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Camera.h",
+              "DocumentMoniker": "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\Camera.h",
+              "RelativeDocumentMoniker": "Camera.h",
+              "ToolTip": "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\Camera.h",
+              "RelativeToolTip": "Camera.h",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-05-07T10:26:06.67Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Camera.cpp",
+              "DocumentMoniker": "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\Camera.cpp",
+              "RelativeDocumentMoniker": "Camera.cpp",
+              "ToolTip": "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\Camera.cpp",
+              "RelativeToolTip": "Camera.cpp",
+              "ViewState": "AgIAAIoAAAAAAAAAAAAuwJkAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-05-05T15:11:52.432Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -42,8 +68,7 @@
               "RelativeToolTip": "Car.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-05T20:05:59.615Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-05T20:05:59.615Z"
             },
             {
               "$type": "Document",
@@ -55,34 +80,7 @@
               "RelativeToolTip": "Car.h",
               "ViewState": "AgIAABoAAAAAAAAAAADwvyQAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-05-05T15:15:42.994Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Camera.h",
-              "DocumentMoniker": "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\Camera.h",
-              "RelativeDocumentMoniker": "Camera.h",
-              "ToolTip": "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\Camera.h",
-              "RelativeToolTip": "Camera.h",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAuwAkAAAAHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-05-01T15:27:26.924Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Camera.cpp",
-              "DocumentMoniker": "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\Camera.cpp",
-              "RelativeDocumentMoniker": "Camera.cpp",
-              "ToolTip": "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\Camera.cpp",
-              "RelativeToolTip": "Camera.cpp",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAADQAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-05-05T15:11:52.432Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-05T15:15:42.994Z"
             }
           ]
         }
