@@ -6,18 +6,23 @@ class Camera
 public:
 	Camera();
 	// Function of Speed Limit
-	void speedLimit20();
-	void speedLimit30();
+	void speedLimit20TraficSingh();
+	void speedLimit30TraficSingh();
 	void speedLimit(float speed);
-	void checkSpeed();
-	float calculateStoppingDistance(float currentSpeed);
-	float calculateDeceleration(float targetSpeed);
-	void applyEmergencyBraking(float deltaTime);
-	void applyGradualDeceleration(float targetSpeed, float deltaTime);
-	
-	void stop();
-
+	void monitorSpeedChangeProcess(
+		string reason,
+		std::function<bool(float)> isTargetReached,
+		float maxDuration,
+		float targetSpeed = 0.0f
+	);
+	void stopping(string reason);
+	void slowdown(string reason);
+	bool isCarDecelerating(float previousSpeed, float currentSpeed);
+	void stopTraficSingh();	
 	void greenLight();
+	void redLight();
+	void pedestrians();
+	void crosswalk();
 
 private:
 	Car car; // Declare car as a Car object (member variable)
