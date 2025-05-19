@@ -14,7 +14,7 @@ void GPS::GPSplay()
 	// Create an input file stream
 	std::ifstream inputFile("GPS.txt");
 	if (!inputFile.is_open()) {
-		std::cerr << "didn't success to open the file: GPS.txt" << std::endl;
+		globalPrint.printError("didn't success to open the file: GPS.txt");
 		return;
 	}
 	string line;
@@ -27,12 +27,13 @@ void GPS::GPSplay()
 		if (ss >> latitude >> delimiter >> longitude && delimiter == ',') {
 			setLatitude(latitude);
 			setLongitude(longitude);
-			std::cout << "Latitude: " << getLatitude() << ", Longitude: " << getLongitude() << std::endl;
+			
+			globalPrint.print("latitude: " + std::to_string(getLatitude()) + ", longitude: " + std::to_string(getLongitude()));
 			// Pause the execution of the current thread for one second
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
 		else {
-			std::cerr << "invalid line at the file: " << line << std::endl;
+			globalPrint.printError("invalid line at the file: " + line);
 		}
 	}
 	inputFile.close();

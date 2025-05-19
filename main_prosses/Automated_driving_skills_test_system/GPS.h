@@ -1,23 +1,23 @@
 #pragma once
+#include "globalFunc.h"
+#include <mutex>
+using namespace std;
+
 class GPS
 {
 public:
 	GPS();
-	//че шезб (Latitude)
-private:
-	double Latitude;
-	//че аешк (Longitude)
-private:
-	double Longitude;
-public:
-	void setLatitude(double Latitude) { this->Latitude = Latitude; }
-public:
-	double getLatitude() { return Latitude; }
-public:
-	void setLongitude(double Longitude) { this->Longitude = Longitude; }
-public:
-	double getLongitude() { return Longitude; }
-public:
 	void GPSplay();
-
+private:
+	//че шезб (Latitude)
+	double Latitude;
+	mutex mtx_latitude;
+	//че аешк (Longitude)
+	double Longitude;
+	mutex mtx_longitude;
+	void setLatitude(double Latitude) { lock_guard<std::mutex> lock(mtx_latitude); this->Latitude = Latitude; }
+	double getLatitude() { lock_guard<std::mutex> lock(mtx_latitude); return Latitude; }
+	void setLongitude(double Longitude) { lock_guard<std::mutex> lock(mtx_longitude); this->Longitude = Longitude; }
+	double getLongitude() { lock_guard<std::mutex> lock(mtx_longitude); return Longitude; }
+	globalFunc globalPrint;
 };
