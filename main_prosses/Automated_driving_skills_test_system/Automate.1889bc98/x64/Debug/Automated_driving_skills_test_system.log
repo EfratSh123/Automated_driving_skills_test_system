@@ -1,2 +1,319 @@
-﻿  GPS.cpp
-  Automated_driving_skills_test_system.vcxproj -> C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\x64\Debug\Automated_driving_skills_test_system.exe
+﻿  Automated_driving_skills_test_system.cpp
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Car.h(61,77): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Automated_driving_skills_test_system.cpp')
+  
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(76,18): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(85,34): warning C4101: 'e': unreferenced local variable
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(88,30): warning C4101: 'e': unreferenced local variable
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14): error C2672: 'invoke': no matching overloaded function found
+  (compiling source file 'Automated_driving_skills_test_system.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\type_traits(1699,16):
+      could be 'unknown-type std::invoke(_Callable &&,_Ty1 &&,_Types2 ...) noexcept(<expr>)'
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14):
+          Failed to specialize function template 'unknown-type std::invoke(_Callable &&,_Ty1 &&,_Types2 ...) noexcept(<expr>)'
+              C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14):
+              With the following template arguments:
+                  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14):
+                  '_Callable=void (__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,Camera::CameraFunction,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,Camera::CameraFunction>>> &,float)'
+                  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14):
+                  '_Ty1=Camera *'
+                  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14):
+                  '_Types2={}'
+              C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\type_traits(1702,45):
+              'std::_Invoker_pmf_pointer::_Call': no matching overloaded function found
+                  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\type_traits(1632,27):
+                  could be 'unknown-type std::_Invoker_pmf_pointer::_Call(_Decayed,_Ty1 &&,_Types2 ...) noexcept(<expr>)'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\type_traits(1693,16):
+      or       'unknown-type std::invoke(_Callable &&) noexcept(<expr>)'
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14):
+          'unknown-type std::invoke(_Callable &&) noexcept(<expr>)': expects 1 arguments - 2 provided
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14):
+      the template instantiation context (the oldest one first) is
+          C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(42,13):
+          see reference to function template instantiation 'std::thread::thread<void(__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,Camera::CameraFunction,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,Camera::CameraFunction>>> &,float),Camera*,0>(_Fn &&,Camera *&&)' being compiled
+          with
+          [
+              _Fn=void (__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,Camera::CameraFunction,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,Camera::CameraFunction>>> &,float)
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(93,9):
+          see reference to function template instantiation 'void std::thread::_Start<_Ty,Camera*>(_Fn &&,Camera *&&)' being compiled
+          with
+          [
+              _Ty=void (__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,Camera::CameraFunction,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,Camera::CameraFunction>>> &,float),
+              _Fn=void (__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,Camera::CameraFunction,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,Camera::CameraFunction>>> &,float)
+          ]
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(76,40):
+          see reference to function template instantiation 'unsigned int (__cdecl *std::thread::_Get_invoke<std::thread::_Start::_Tuple,0,1>(std::integer_sequence<size_t,0,1>) noexcept)(void *) noexcept' being compiled
+          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(67,17):
+          see reference to function template instantiation 'unsigned int std::thread::_Invoke<std::thread::_Start::_Tuple,0,1>(void *) noexcept' being compiled
+  
+  Camera.cpp
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Car.h(61,77): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Camera.cpp')
+  
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Camera.cpp(116,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Camera.cpp(265,38): warning C4101: 'e': unreferenced local variable
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Camera.cpp(268,34): warning C4101: 'e': unreferenced local variable
+  Car.cpp
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Car.h(61,77): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Car.cpp')
+  
+  DrivingRoute.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(203,9): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(975,6): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(983,6): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypesbase.h(447,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypesbase.h(472,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypesbase.h(489,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h(85,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h(94,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h(100,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h(106,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h(112,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h(118,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\wtypes.h(493,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidlbase.h(2275,74): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidlbase.h(2289,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidlbase.h(8492,74): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidlbase.h(8508,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(10444,64): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(11002,72): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(11034,72): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(11542,74): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(11557,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(12018,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(13832,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(13847,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(15586,74): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(15602,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(15749,72): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(15788,72): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(15805,74): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(15822,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(16067,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\objidl.h(16086,57): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\um\oaidl.h(571,21): error C2872: 'byte': ambiguous symbol
+  (compiling source file 'DrivingRoute.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\rpcndr.h(202,23):
+      could be 'unsigned char byte'
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\cstddef(34,24):
+      or       'std::byte'
+  
+  func.cpp
+  globalFunc.cpp
+  GPS.cpp
+  IMU.cpp
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Car.h(61,77): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'IMU.cpp')
+  
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(176,38): error C3861: 'GettimeSensor': identifier not found
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(178,46): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Lidar.cpp
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Car.h(61,77): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'Lidar.cpp')
+  
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(71,28): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  RoadLane.cpp
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Car.h(61,77): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  (compiling source file 'RoadLane.cpp')
+  
+  RoadSpeedInfo.cpp
+  Generating Code...

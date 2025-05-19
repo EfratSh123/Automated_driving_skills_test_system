@@ -1,0 +1,11 @@
+in: 53 m - Head southwest on Se'ora St toward Ha-Irusim St
+in: 0.4 km - Turn right onto Ha-Irusim St
+in: 0.3 km - Turn left onto Ha-Vradim St
+in: 29 m - Turn right toward HaRakafot St
+in: 0.4 km - At the roundabout, take the 2nd exit onto HaRakafot St
+in: 0.4 km - At the roundabout, continue straight onto Derech Sarah
+in: 0.2 km - At the roundabout, continue straight onto HaRav Shim'onovits St
+in: 0.5 km - At the roundabout, take the 1st exit onto Ha-Gefen St
+in: 33 m - Turn right onto Avodat Israel St
+in: 0.3 km - Turn left onto Giborei ha-Tehila St
+in: 51 m - Turn right to stay on Giborei ha-Tehila St

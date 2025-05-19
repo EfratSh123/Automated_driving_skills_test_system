@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\lib;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\debug\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -102,13 +106,76 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNINGS;_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS
+;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\include\opencv4;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\include\opencv4\opencv2</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>brotlicommon.lib;brotlidec.lib;brotlienc.lib;cpprest_2_10d.lib;cpr.lib;libcurl-d.lib;opencv_calib3d4.lib;
+
+
+
+opencv_core4.lib;
+
+
+
+opencv_dnn4.lib;
+
+
+
+opencv_features2d4.lib;
+
+
+
+opencv_flann4.lib;
+
+
+
+opencv_highgui4.lib;
+
+
+
+opencv_imgcodecs4.lib;
+
+
+
+opencv_imgproc4.lib;
+
+
+
+opencv_ml4.lib;
+
+
+
+opencv_objdetect4.lib;
+
+
+
+opencv_photo4.lib;
+
+
+
+opencv_stitching4.lib;
+
+
+
+opencv_video4.lib
+;
+
+
+opencv_videoio4.lib
+quirc.lib;
+;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalLibraryDirectories>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\lib;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\debug\lib;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\lib\opencv_videoio4.lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -130,16 +197,26 @@
     <ClCompile Include="Automated_driving_skills_test_system.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Car.cpp" />
+    <ClCompile Include="DrivingRoute.cpp" />
+    <ClCompile Include="func.cpp" />
+    <ClCompile Include="globalFunc.cpp" />
     <ClCompile Include="GPS.cpp" />
     <ClCompile Include="IMU.cpp" />
     <ClCompile Include="Lidar.cpp" />
+    <ClCompile Include="RoadLane.cpp" />
+    <ClCompile Include="RoadSpeedInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Car.h" />
+    <ClInclude Include="DrivingRoute.h" />
+    <ClInclude Include="func.h" />
+    <ClInclude Include="globalFunc.h" />
     <ClInclude Include="GPS.h" />
     <ClInclude Include="IMU.h" />
     <ClInclude Include="Lidar.h" />
+    <ClInclude Include="RoadLane.h" />
+    <ClInclude Include="RoadSpeedInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
