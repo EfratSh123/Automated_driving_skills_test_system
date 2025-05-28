@@ -1,154 +1,148 @@
 #include "IMU.h"
 extern bool flagSpeed;
-
+extern bool pass;
+extern int grade;
+#include <vector>
+#include <numeric>
+#include <cmath>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 IMU::IMU()
 {
 }
 IMU::IMU(Car* car) : carPtr(car), Acceleration(0.0), GyroX(0.0), GyroY(0.0)
 {
 }
-
-
-// הפונקציה שולטת על מהירות הרכב על ידי האצה או האטה עד להגעה למהירות היעד.
-// The function controls the vehicle's speed by accelerating or decelerating to reach the target speed.
-void IMU::controlSpeed(double targetSpeed, double accelerationRate, double decelerationRate) {
-	globalPrint.print(
-		"IMU: Initiating speed control. Target: " + to_string(targetSpeed) +
-		" km/h, Acceleration Rate: " + to_string(accelerationRate) +
-		" km/h/s, Deceleration Rate: " + to_string(decelerationRate) + " km/h/s");
-	// accelerate - האצה
-	if (carPtr->getSpeed() < targetSpeed) {
-		// until the current speed reaches the target speed.
-		while (carPtr->getSpeed() < targetSpeed) {
-			// Adding the acceleration rate to the current speed - הוספת קצב האצה למהירות הנוכחית
-			carPtr->setSpeed(carPtr->getSpeed() + accelerationRate);
-			if (carPtr->getSpeed() > targetSpeed)	carPtr->setSpeed(targetSpeed);
-			globalPrint.print("IMU: Accelerating. Current speed: " + to_string(carPtr->getSpeed()) + " km/h");
-			// Pausing the process for one second to simulate acceleration time.
-			this_thread::sleep_for(chrono::seconds(1)); // הדמיה שלוקח זמן להאיץ
-		}
-	}
-	// If the current speed is higher than the target speed, the vehicle will decelerate.
-	else if (carPtr->getSpeed() > targetSpeed) {
-		// The loop continues until the current speed reaches the target speed.
-		while (carPtr->getSpeed() > targetSpeed) {
-			// Subtracting the deceleration rate from the current speed - הפחתת קצב ההאטה מהמהירות הנוכחית
-			carPtr->setSpeed(carPtr->getSpeed() - decelerationRate);
-			if (carPtr->getSpeed() < targetSpeed) carPtr->setSpeed(targetSpeed);
-			globalPrint.print("IMU: Decelerating. Current speed: " + to_string(carPtr->getSpeed()) + " km/h");
-			// Pausing the process for one second to simulate deceleration time.
-			this_thread::sleep_for(chrono::seconds(1)); // הדמיה שלוקח זמן להאט
-		}
-	}
-	else {
-		// If the current speed is already equal to the target speed.
-		globalPrint.print("IMU: Current speed is already at the target.");
-	}
-	globalPrint.print("IMU: Speed control complete. Final speed: " + to_string(carPtr->getSpeed()) + " km/h");
-}
-
-// הפונקציה עוקבת אחר תהליך שינוי המהירות עד שהיעד מושג או שהזמן המרבי חלף.
-// The function monitors the speed change process until the target is reached or the maximum duration has elapsed.
-void IMU::monitorSpeedChangeProcess(
-	string reason,
-	function<bool(double)> isTargetReached,
-	float maxDuration,
-	double targetSpeed
-) {
-	globalPrint.print("IMU: Monitoring speed change due to " + reason + ". Target speed: " + to_string(targetSpeed) + " km/h. Max duration: " + to_string(maxDuration) + " seconds.");
-	// Saving the start time of the monitoring process.
-	auto startTime = chrono::high_resolution_clock::now();
-	double previousCarSpeed = carPtr->getSpeed();
-	while (!isTargetReached(carPtr->getSpeed())) {
+// הפונקציה שעוקבת אחר שינוי מהירות, ואם תוך פרק זמן מוגדר לא הושגה המהירות - מבוצעת בלימת חירום.
+void IMU::monitorSpeedChangeProcess(string reason,
+	float targetSpeed,
+	float maxDurationSeconds,
+	float emergencyDecelerationRate) {
+	globalPrint.print("IMU: Monitoring speed change for reason: " + reason);
+	unsigned int secondsPassed = 0;
+	// נעקוב אחרי הזמן שעבר ומהירות הנהג עד שמגיעים למהירות היעד או שנגמר הזמן
+	while (secondsPassed < maxDurationSeconds && !is_target_reached(carPtr->getSpeed(), targetSpeed)) {
 		this_thread::sleep_for(chrono::seconds(1));
-		auto currentTime = chrono::high_resolution_clock::now();
-		// Calculating the elapsed duration.
-		auto duration = chrono::duration_cast<chrono::seconds>(currentTime - startTime);
-		// Checking if the vehicle is decelerating.
-		if (isCarDecelerating(previousCarSpeed, carPtr->getSpeed())) {
-			globalPrint.print("IMU: The car is decelerating. Speed: " + to_string(carPtr->getSpeed()) + " km/h");
-		}
-		// If the vehicle has not reached the target and is not decelerating.
-		else if (!isTargetReached(carPtr->getSpeed())) {
-			// Printing a message that the vehicle is not progressing towards the target speed.
-			globalPrint.print("IMU: The car is not progressing towards the target speed. Speed: " + to_string(carPtr->getSpeed()) + " km/h");
-		}
-
-		previousCarSpeed = carPtr->getSpeed();
-
-		// Checking if the maximum duration has elapsed.
-		if (duration.count() >= maxDuration) {
-			// הדפסת אזהרה שהרכב לא הגיע ליעד בזמן והחלה פעולה מאולצת.
-			// Printing a warning that the vehicle did not reach the target in time and initiating a forced action.
-			globalPrint.print("IMU: Warning: Car did not reach target within " + to_string(maxDuration) + " seconds. Initiating forced action.");
-			// If the target speed is lower than the previous speed (should decelerate).
-			if (targetSpeed < previousCarSpeed) {
-				// If the target speed is 0 (stopping).
-				if (targetSpeed == 0.0f) {
-					// Emergency deceleration rate - קצב האטת חירום
-					double emergencyDecelerationRate = 27.0f;
-					// עדכון המהירות בהתאם לקצב ההאטה המקסימלי, לא לרדת מתחת ל-0.
-					// Updating the speed according to the maximum deceleration rate, not going below 0.
-					carPtr->setSpeed(max(targetSpeed, carPtr->getSpeed() - emergencyDecelerationRate));
-					// ************************* הורדת ניקוד *************************************
-				}
-				else {
-					// אם מהירות היעד גדולה מ-0 (האטה רגילה נכשלה).
-					// If the target speed is greater than 0 (normal deceleration failed).
-					// כאן תוסיף את הלוגיקה להורדת ניקוד על אי-האטה נכונה (אם רלוונטי ל-IMU)
-					// Here you would add the logic for deducting points for incorrect deceleration (if relevant to IMU).
-				}
-			}
-		}
+		secondsPassed++;
 	}
-	globalPrint.print("IMU: The car reached the target due to " + reason + ". Final speed: " + to_string(carPtr->getSpeed()) + " km/h.");
+	// בדיקה אם הושגה מהירות היעד
+	if (is_target_reached(carPtr->getSpeed(), targetSpeed)) {
+		globalPrint.print("IMU: Target speed reached in time. Final speed: " + to_string(carPtr->getSpeed()));
+		return;
+	}
+	// אחרת, בלימת חירום והורדת ניקוד
+	globalPrint.print("IMU: Target not reached in time. Triggering gradual emergency braking.");
+	pass = false;
+	grade -= 10;
+	while (carPtr->getSpeed() > targetSpeed) {
+		float speedNow = carPtr->getSpeed();
+		float newSpeed = max(targetSpeed, speedNow - emergencyDecelerationRate);
+		carPtr->setSpeed(newSpeed);
+		globalPrint.print("IMU: Emergency braking... Speed: " + to_string(newSpeed));
+		this_thread::sleep_for(chrono::seconds(1));
+	}
+	globalPrint.print("IMU: Emergency braking complete. Final speed: " + to_string(carPtr->getSpeed()));
+	return;
+}
+// ניהול אירוע נהיגה שדורש תגובה מהנהג
+void IMU::manageDrivingEvent(string reason) {
+	float target_speed = get_target_speed_for_reason(reason);
+	unsigned long time_limit = get_time_limit_for_reason(reason);
+	monitorSpeedChangeProcess(reason, target_speed , time_limit,  25);
+}
+// מחזירה מהירות יעד לפי הסיבה
+float get_target_speed_for_reason(string reason) {
+	if (reason == "red_light" || reason == "stop" || reason == "pedestrian") return 0.0; 
+	return 20;
+}
+// מחזירה מגבלת זמן להתאמה לפי הסיבה
+unsigned long get_time_limit_for_reason(string reason) {
+	if (reason == "red_light" || reason == "stop" || reason == "pedestrian") return 2000;
+	return 3000;
+}
+// בדיקה אם מהירות היעד הושגה
+bool is_target_reached(float current_speed, float target_speed) {
+	return abs(current_speed - target_speed) < 0.3;
 }
 
-void IMU::stoppingImu(string reason) {
-	monitorSpeedChangeProcess(reason, [](double currentSpeed) { return currentSpeed <= 0; }, 2.5f, 0.0f);
-}
-
-void IMU::slowdownImu(string reason) {
-	double targetSpeed = 0.0f;
-	if (reason == "crosswalk") {
-		targetSpeed = 30.0f;
-	}
-	else if (reason == "before turn") {
-		targetSpeed = 40.0f;
-	}
-	monitorSpeedChangeProcess(reason, [targetSpeed](double currentSpeed) { return currentSpeed <= targetSpeed; }, 4.0f, targetSpeed);
-}
-
-void IMU::monitorMaxSpeed()
+void IMU::monitorMaxSpeed(Car &c)
 {
-	while (flagSpeed) {
-		if (carPtr != nullptr) {
-			double currentSpeed = carPtr->getSpeed();
-			double maxSpeed = carPtr->getMaxSpeed();
-			if (currentSpeed > maxSpeed) {
-				globalPrint.print("IMU: Warning! Vehicle speed (" + to_string(currentSpeed) + " km/h) exceeds maximum speed (" + to_string(maxSpeed) + " km/h).");
-				// ************************* הורדת נקודות על מהירות גבוהה מהמותר *************************************
-				globalPrint.print("IMU: Points deducted for exceeding maximum speed.");
-			}
-		}
-		else {
-			globalPrint.print("IMU: Error! Car pointer is null in monitorMaxSpeed.");
-			// אולי כדאי לצאת מהלולאה או לטפל במצב הזה בצורה אחרת
-			break;
-		}
-		// בדיקה כל פרק זמן מסוים (למשל, כל שנייה)
+	bool flag = false; 
+	// נעקוב כל עוד המהירות גבוהה מהמותרת
+	while (c.getSpeed() > c.getMaxSpeed()) {
+		globalPrint.print("Warning: Speed exceeds limit! Current: " + to_string(c.getSpeed()) + " km/h, Max: "
+							+ to_string(c.getMaxSpeed()) + " km/h");
 		this_thread::sleep_for(chrono::seconds(1));
+		flag = true;
+	}
+	if (flag) {
+		// הורדת ניקוד על מהירות מופזרת
+		int way = 21; // Urban
+		if (c.getMaxSpeed() > 60) // Interurban
+			way = 26;
+		if ((c.getSpeed() - c.getMaxSpeed()) > way) {
+			pass = false;
+		}
 	}
 }
 
 // Function that checks if the vehicle is decelerating.
-bool IMU::isCarDecelerating(double previousSpeed, double currentSpeed) {
+bool IMU::isCarDecelerating(float previousSpeed, float currentSpeed) {
 	return previousSpeed > currentSpeed;
 }
 
+// חישוב סטיית תקן של נתונים
+float IMU::computeStdDev(const std::vector<float>& data) {
+	float mean = std::accumulate(data.begin(), data.end(), 0.0) / data.size();
+	float sumSq = 0.0;
+	for (float val : data) {
+		sumSq += (val - mean) * (val - mean);
+	}
+	return std::sqrt(sumSq / data.size());
+}
+// פונקציה שמחשבת רעש חיישן IMU על סמך נתונים מקובץ IMU.txt
+void IMU::computeSensorNoise(GPS* gps)
+{
+	ifstream inputFile("IMU.txt");
+	if (!inputFile.is_open()) {
+		globalPrint.printError("Failed to open IMU.txt");
+		AccelNoise = 0.1;
+		GyroNoise = 0.1;
+		return;
+	}
+	vector<float> accelData;
+	vector<float> gyroVecData;
+	string line;
+	while (getline(inputFile, line)) {
+		stringstream ss(line);
+		float acceleration, currentSpeed, gx, gy;
+		if (ss >> acceleration >> currentSpeed >> gx >> gy) 
+		{
+			accelData.push_back(acceleration);
+			float gyroMagnitude = std::sqrt(gx * gx + gy * gy);
+			gyroVecData.push_back(gyroMagnitude);
+			if (!accelData.empty() && !gyroVecData.empty()) {
+				AccelNoise = computeStdDev(accelData);
+				GyroNoise = computeStdDev(gyroVecData);
+			}
+			else {
+				globalPrint.printError("IMU.txt contains insufficient or invalid data");
+				AccelNoise = 0.1;
+				GyroNoise = 0.1;
+			}
+			gps->setAccelNoise(AccelNoise);
+			gps->setGyroNoise(GyroNoise);
+			this_thread::sleep_for(chrono::seconds(1));
+		}
+	}
+	inputFile.close();
+}
+
+
 void IMU::IMUplay()
 {
-	double speed;
+	float speed;
 	// Create an input file stream
 	ifstream inputFile("IMU.txt");
 	if (!inputFile.is_open()) {
@@ -159,7 +153,7 @@ void IMU::IMUplay()
 	//read the file line by line
 	while (getline(inputFile, line)) {
 		stringstream ss(line);
-		double acceleration, currentSpeed, gyroX, gyroY;
+		float acceleration, currentSpeed, gyroX, gyroY;
 
 		if (ss >> acceleration >> currentSpeed >> gyroX >> gyroY ) {
 			setAcceleration(acceleration);
@@ -173,7 +167,7 @@ void IMU::IMUplay()
 			// מחשב את התאוצה הזוויתית על ידי מציאת השינוי במהירות הזוויתית ביחס למהירות הזוויתית הקודמת ומחלק אותו במרווח הזמן (dt)
 			acceleration = (speed - carPtr->getPrevSpeed()) / dt; // Calculate acceleration
 			// המרת המהירות הזויתית לקמש והכפלתה בזמן שעבר
-			distance = (speed * 1000 / 3600 * GettimeSensor()); // 1000=1 k"m, 3600 secoend=1 hour
+			distance = (speed * 1000 / 3600 * getStartTime()); // 1000=1 k"m, 3600 secoend=1 hour
 
 			carPtr->setDistance(carPtr->getDistance() + distance); // Update the speed the car has traveled
 		////
@@ -187,6 +181,7 @@ void IMU::IMUplay()
 
 			// Pause the execution of the current thread for one second
 			this_thread::sleep_for(chrono::seconds(1));
+			updateStartTimeByOneSecond();
 		}
 		else {
 			globalPrint.printError("Invalid line in IMU.txt: " + line);
@@ -194,3 +189,4 @@ void IMU::IMUplay()
 	}
 	inputFile.close();
 }
+

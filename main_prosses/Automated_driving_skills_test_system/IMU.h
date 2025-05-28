@@ -1,4 +1,5 @@
 #pragma once
+#include <windows.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,59 +9,64 @@
 #include <functional>
 #include "Car.h"
 #include "globalFunc.h"
+#include "GPS.h"
 #include <mutex>
 using namespace std;	
-
 class IMU
 {
 public:
 	IMU();
 	IMU(Car* car);
 private:
-	Car* carPtr; // מצביע לאובייקט Car
-	//******************** האם ליצור לו mutex? **************************
-	double Acceleration;
+	Car* carPtr;
+	float Acceleration;
 	mutex mtx_Acceleration;
+	float AccelNoise, GyroNoise;
 	// קצב דגימה מהחיישן
-	double dt = 0.1;
-	double distance;
-	mutex mtx_distance;
+	float dt = 0.1;
+	float distance;
 	// מהירות הזוויתית סביב ציר X, Y
-	double GyroX;
+	float GyroX;
 	mutex mtx_GyroX;
-	double GyroY;
+	float GyroY;
 	mutex mtx_GyroY;
 	globalFunc globalPrint;
+	chrono::steady_clock::time_point startTime;
+	mutex mtx_startTime;
 
 public:
-	void setAcceleration(double Acceleration) { lock_guard<std::mutex> lock(mtx_Acceleration); this->Acceleration = Acceleration; }
-	double getAcceleration() { lock_guard<std::mutex> lock(mtx_Acceleration); return Acceleration; }
-	void setGyroX(double GyroX) { lock_guard<std::mutex> lock(mtx_GyroX); this->GyroX = GyroX; }
-	double getGyroX() { lock_guard<std::mutex> lock(mtx_GyroX); return GyroX; }
-	void setGyroY(double GyroY) { lock_guard<std::mutex> lock(mtx_GyroY); this->GyroY = GyroY; }
-	double getGyroY() { lock_guard<std::mutex> lock(mtx_GyroY); return GyroY; }
-	double getDistance() { lock_guard<std::mutex> lock(mtx_distance); return distance; }
-	void setDistance(double distance) { lock_guard<std::mutex> lock(mtx_distance); this->distance = distance; }
-
+	void computeSensorNoise(GPS* gps);
+	float computeStdDev(const std::vector<float>& data);
+	void setAcceleration(float Acceleration) { lock_guard<std::mutex> lock(mtx_Acceleration); this->Acceleration = Acceleration; }
+	float getAcceleration() { lock_guard<std::mutex> lock(mtx_Acceleration); return Acceleration; }
+	void setGyroX(float GyroX) { lock_guard<std::mutex> lock(mtx_GyroX); this->GyroX = GyroX; }
+	float getGyroX() { lock_guard<std::mutex> lock(mtx_GyroX); return GyroX; }
+	void setGyroY(float GyroY) { lock_guard<std::mutex> lock(mtx_GyroY); this->GyroY = GyroY; }
+	float getGyroY() { lock_guard<std::mutex> lock(mtx_GyroY); return GyroY; }
+	float getDistance() {return distance; }
+	void setDistance(float distance) {this->distance = distance; }
 	void IMUplay();
-
-	// פונקציה לשליטה בהאצה, האטה ועצירה
-	void controlSpeed(double targetSpeed, double accelerationRate, double decelerationRate);
-
 	// פונקציות מעקב פנימיות
-	void monitorSpeedChangeProcess(
-		std::string reason,
-		std::function<bool(double)> isTargetReached,
-		float maxDuration,
-		double targetSpeed
-	);
-	bool isCarDecelerating(double previousSpeed, double currentSpeed);
-
-	// פונקציות ספציפיות לפעולות נהיגה
-	void stoppingImu(std::string reason);
-	void slowdownImu(std::string reason);
+	void monitorSpeedChangeProcess(string reason,
+		float targetSpeed,
+		float maxDurationSeconds,
+		float emergencyDecelerationRate);
+	bool isCarDecelerating(float previousSpeed, float currentSpeed);
 	// מעקב תמידי אחר מהירות הרכב
-	void monitorMaxSpeed();
+	void monitorMaxSpeed(Car &c);
+	void manageDrivingEvent(string reason);
+	double getStartTime()
+	{
+		std::lock_guard<std::mutex> lock(mtx_startTime);
+		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+		startTime.time_since_epoch()).count();
+		return duration / 1000.0;
+	}
+	void updateStartTimeByOneSecond()
+	{
+		std::lock_guard<std::mutex> lock(mtx_startTime);
+		startTime = startTime + std::chrono::seconds(1);
+	}
+
 
 };
-

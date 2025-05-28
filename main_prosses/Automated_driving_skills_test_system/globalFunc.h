@@ -1,5 +1,6 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
+#include <windows.h>
 
 #include <string>
 #include <mutex>

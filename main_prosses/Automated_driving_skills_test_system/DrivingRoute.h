@@ -1,5 +1,6 @@
 #ifndef DRIVINGROUTE_H
 #define DRIVINGROUTE_H
+#include <windows.h>
 
 #include <string>
 #include <vector>
@@ -10,6 +11,7 @@
 
 class DrivingRoute {
 public:
+    DrivingRoute() {};
     DrivingRoute(const std::string& apiKey);
     void getDirections(const std::string& origin, const std::string& destination);
     std::vector<std::string> getInstructions() const;

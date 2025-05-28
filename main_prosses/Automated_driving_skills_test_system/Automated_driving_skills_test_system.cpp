@@ -5,7 +5,6 @@
 #include "Car.h"
 #include "Camera.h"
 #include <iostream>
-#include "RoadSpeedInfo.h"
 #include "DrivingRoute.h"
 #include <fstream>
 #include <string>
@@ -15,9 +14,9 @@
 #include "globalFunc.h"
 #include <functional>
 #include "RoadLane.h"
-
-
 using namespace std;
+int grade = 100;
+bool pass = true;
 int flagPrint = 0;
 bool onyolo = true;
 bool onCnn = true;
@@ -32,72 +31,76 @@ Lidar lidar;
 IMU imu;
 Camera camera;
 RoadLane roadLane;
-
+DrivingRoute drivingRoute;
 int main()
 {
+	// create driving routes
+	drivingRoute.getDirections("32.75514497433894,35.09988438222732", "32.750610905702,35.091979224811844");
+	vector<string> drivingRouteLines = drivingRoute.getInstructions();
+
 	// play sensors
 	thread imu_play(&IMU::IMUplay, &imu);
-	thread gps_play(&GPS::GPSplay, &gps); // אמור להפעיל מסנן קלמן?
+	thread gps_play(&GPS::GPSplay, &gps); 
 	thread Lidar_play(&Lidar::processLidarData, &lidar, ref(car)); // בדיקת מרחק מרכב לפני
 	thread yolo(&Camera::processYOLODetections, &camera); 
+	thread lidarCarDistanceFront(&Lidar::monitorSafeDistance, &lidar, ref(car));
 	thread CNN(&Camera::processCNNDetections, &camera);
-	thread maxSpeed(&IMU::monitorMaxSpeed, &imu); // מהירות מקסימלית מותרת
-	thread roadLaneTread(&RoadLane::runLaneDetection, &roadLane, ref(car)); // נתיב נסיעה
+	thread maxSpeed(&IMU::monitorMaxSpeed, &imu, ref(car)); // מהירות מקסימלית מותרת
+	thread roadLaneThread(&RoadLane::runLaneDetection, &roadLane, ref(car)); // נתיב נסיעה
+	thread DeviationDurationThread(&RoadLane::DeviationDuration, &roadLane, ref(car)); // משך סטיה ממרכז הנתיב
+
 	globalFunc globalPrint;
 
-	// קריאה מקובץ הוראות הנסיעה וחילוץ למשתנים: כיוון ומטרים
-	const string inputFilename = "driving_instructions.txt";
-	ifstream inputFile(inputFilename);
-	string line;
-	if (!inputFile.is_open()) {
-		globalPrint.print("can't open the file: " + inputFilename);
-		return 1;
-	}
 	//מעבר על הלולאה של ההוראות
-	while (std::getline(inputFile, line))
+	for (const string& line : drivingRouteLines)
 	{
 		istringstream iss(line.substr(4)); // צור זרם ממחרוזת החלק שאחרי "in: "
 		string distanceStr;
 		string units;
-
 		string direction;
 		iss >> distanceStr >> units >> ws; // קרא את המרחק, היחידות ודלג על רווחים לבנים
-		double meters = 0.0;
+		float meters = 0.0;
 		try {
 			double distance = stod(distanceStr);
 			meters = distance;
 			if (units == "km") {
 				meters = distance * 1000.0;
 			}
-			else {
-				globalPrint.print("Unknown distance units in a row: " + line);
-				continue; // עבור לשורה הבאה
-			}
+			//else {
+			//	globalPrint.printError("Unknown distance units in a row: " + line);
+			//	continue; // pass the next line
+			//}
 			car.setMeters(meters);
-
-			// קרא את שאר השורה ככיוון
-			// ***************לבדוק- מה עושים אם יש הוראה כמו: בכיכר צא ביציאה השניה****************
-			getline(iss >> ws, direction);
+			getline(iss >> ws, direction); // קרא את שאר השורה ככיוון
 			car.setDirection(direction);
 			//globalPrint.print("direction: " + direction + ", meters: " + fixed + setprecision(2) + meters);
 			cout << "direction: " << direction << ", meters: " << fixed << setprecision(2) << meters << endl;
 		}
 		catch (const invalid_argument& e) {
-			globalPrint.print("Invalid distance: " + line);
+			globalPrint.printError("Invalid distance: " + line);
 		}
 		catch (const out_of_range& e) {
-			globalPrint.print("Too great a distance: " + line);
+			globalPrint.printError("Too great a distance: " + line);
 		}
 
-		while (car.getDistance() < car.getMeters());
-		
+		while (car.getDistance() < car.getMeters()); // כל עוד לא הגיע זמן הפניה הבאה
 
-		
-	
-		//sleep 1
+
+// ************************ ??צריך את זה ********************
+		//double distance = 200.0;
+		//while (distance > 0) 
+		//{
+		//	distance -= imu.getAcceleration();
+		//	if (distance < 0) {
+		//		distance = 0;
+		//	}
+		//	//get
+		//	//car.meters = distance;
+		//	//car.speed = imu.getSpeed();
+		//}
+
+		this_thread::sleep_for(chrono::seconds(1));
 	}
-	inputFile.close();
-	// close threads
 	onyolo = false;
 	onCnn = false;
 	onGPS = false;
@@ -105,29 +108,19 @@ int main()
 	onRoadLane = false;
 	onIMU = false;
 	flagSpeed = 1;
-	inputFile.close();
 	imu_play.join();
 	gps_play.join();
 	Lidar_play.join();
 	yolo.join();
 	CNN.join();
 	maxSpeed.join();
-	roadLaneTread.join();
-
-
-	//חישוב  הציון והצגתו/הדפסתו לטסטר
-	 
-	
-	//double distance = 200.0;
-	//while (distance > 0) 
-	//{
-	//	distance -= imu.getAcceleration();
-	//	if (distance < 0) {
-	//		distance = 0;
-	//	}
-	//	//get
-	//	//car.meters = distance;
-	//	//car.speed = imu.getSpeed();
-	//}	
+	roadLaneThread.join();
+	DeviationDurationThread.join();
+	lidarCarDistanceFront.join();
+	//חישוב  הציון והצגתו / הדפסתו לטסטר
+	if (grade >= 90)
+		globalPrint.print("Congratulations! The student passed the Driving Test.");
+	else
+		globalPrint.print("The student did not pass the Driving Test this time. Please continue practicing.");
 	return 0;
 }

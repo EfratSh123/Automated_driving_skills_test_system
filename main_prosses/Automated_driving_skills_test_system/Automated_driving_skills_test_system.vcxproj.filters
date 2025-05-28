@@ -48,6 +48,9 @@
     <ClCompile Include="RoadLane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="KalmanFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Car.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RoadLane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KalmanFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

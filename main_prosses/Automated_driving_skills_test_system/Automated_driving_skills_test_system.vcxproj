@@ -110,7 +110,7 @@
 ;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\include\opencv4;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\include\opencv4\opencv2</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\include\opencv4;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\include\opencv4\opencv2;C:\Users\User\eigen-3.4.0\Eigen</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -202,6 +202,7 @@ quirc.lib;
     <ClCompile Include="globalFunc.cpp" />
     <ClCompile Include="GPS.cpp" />
     <ClCompile Include="IMU.cpp" />
+    <ClCompile Include="KalmanFilter.cpp" />
     <ClCompile Include="Lidar.cpp" />
     <ClCompile Include="RoadLane.cpp" />
     <ClCompile Include="RoadSpeedInfo.cpp" />
@@ -214,6 +215,7 @@ quirc.lib;
     <ClInclude Include="globalFunc.h" />
     <ClInclude Include="GPS.h" />
     <ClInclude Include="IMU.h" />
+    <ClInclude Include="KalmanFilter.h" />
     <ClInclude Include="Lidar.h" />
     <ClInclude Include="RoadLane.h" />
     <ClInclude Include="RoadSpeedInfo.h" />

@@ -1,5 +1,6 @@
 #ifndef ROADSPEEDINFO_H
 #define ROADSPEEDINFO_H
+#include <windows.h>
 
 #include <string>
 #include <future>
