@@ -15,7 +15,7 @@ using namespace std;
 using namespace pplx; 
 
 RoadSpeedInfo::RoadSpeedInfo() : apiKey("XXX") {}
-RoadSpeedInfo::~RoadSpeedInfo() {}
+//RoadSpeedInfo::~RoadSpeedInfo() {}
 
 // Private function to send an asynchronous HTTP GET request and receive the response as JSON
 pplx::task<web::json::value> sendHttpRequest(const std::wstring& url) {

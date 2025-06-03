@@ -23,7 +23,7 @@ private:
 	mutex mtx_Acceleration;
 	float AccelNoise, GyroNoise;
 	// קצב דגימה מהחיישן
-	float dt = 0.1;
+	float dt = 0.1f;
 	float distance;
 	// מהירות הזוויתית סביב ציר X, Y
 	float GyroX;
@@ -52,6 +52,7 @@ public:
 		float maxDurationSeconds,
 		float emergencyDecelerationRate);
 	bool isCarDecelerating(float previousSpeed, float currentSpeed);
+	static bool is_target_reached(float current_speed, float target_speed);
 	// מעקב תמידי אחר מהירות הרכב
 	void monitorMaxSpeed(Car &c);
 	void manageDrivingEvent(string reason);
@@ -67,6 +68,8 @@ public:
 		std::lock_guard<std::mutex> lock(mtx_startTime);
 		startTime = startTime + std::chrono::seconds(1);
 	}
+	float get_target_speed_for_reason(string reason);
+	unsigned long get_time_limit_for_reason(string reason);
 
 
 };

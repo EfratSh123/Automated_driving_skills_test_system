@@ -15,8 +15,8 @@
 extern int grade; 
 using namespace std;
 #undef max // Prevent conflict with std::min or other methods named 'min'
-IMU imu;
-bool onLidar = true;
+IMU imu1;
+extern bool onLidar;
 extern bool pass; 
 Lidar::Lidar() 
 {
@@ -95,7 +95,7 @@ void Lidar::monitorSafeDistance(Car& car)
     // אם נכנס למרחק סכנה - קריאה מיידית לאירוע חריג
     if (currentDistance <= dangerDistance) {
         globalPrint.print("Danger! Too close to the vehicle ahead.");
-        imu.manageDrivingEvent("too_near_distance");
+        imu1.manageDrivingEvent("too_near_distance");
         pass = false;
     }
     // אם החזיק מרחק לא בטוח לאורך זמן - הורדת ניקוד

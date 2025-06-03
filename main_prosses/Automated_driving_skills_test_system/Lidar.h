@@ -25,5 +25,5 @@ public:
 	float getAzimuth() { lock_guard<std::mutex> lock(mtx_Azimuth); return Azimuth; }
 	void setRange(float Range) { lock_guard<std::mutex> lock(mtx_Range); this->Range = Range; }
 	float getRange() { lock_guard<std::mutex> lock(mtx_Range); return Range; }
-	void monitorSafeDistance(Car& car) {};
+	void monitorSafeDistance(Car& car);
 };

@@ -52,18 +52,14 @@ void IMU::manageDrivingEvent(string reason) {
 	monitorSpeedChangeProcess(reason, target_speed , time_limit,  25);
 }
 // מחזירה מהירות יעד לפי הסיבה
-float get_target_speed_for_reason(string reason) {
+float IMU::get_target_speed_for_reason(string reason) {
 	if (reason == "red_light" || reason == "stop" || reason == "pedestrian") return 0.0; 
 	return 20;
 }
 // מחזירה מגבלת זמן להתאמה לפי הסיבה
-unsigned long get_time_limit_for_reason(string reason) {
+unsigned long IMU::get_time_limit_for_reason(string reason) {
 	if (reason == "red_light" || reason == "stop" || reason == "pedestrian") return 2000;
 	return 3000;
-}
-// בדיקה אם מהירות היעד הושגה
-bool is_target_reached(float current_speed, float target_speed) {
-	return abs(current_speed - target_speed) < 0.3;
 }
 
 void IMU::monitorMaxSpeed(Car &c)
@@ -90,6 +86,11 @@ void IMU::monitorMaxSpeed(Car &c)
 // Function that checks if the vehicle is decelerating.
 bool IMU::isCarDecelerating(float previousSpeed, float currentSpeed) {
 	return previousSpeed > currentSpeed;
+}
+
+// בדיקה אם מהירות היעד הושגה
+bool IMU::is_target_reached(float current_speed, float target_speed) {
+	return abs(current_speed - target_speed) < 0.3;
 }
 
 // חישוב סטיית תקן של נתונים

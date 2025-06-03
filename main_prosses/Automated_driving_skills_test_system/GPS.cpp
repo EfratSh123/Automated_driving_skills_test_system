@@ -16,7 +16,7 @@ void GPS::GPSplay()
 	// Create an input file stream
 	std::ifstream inputFile("GPS.txt");
 
-	KalmanFilter KF(this->Latitude, this->Longitude, 0.0, this->AccelNoise, this->GyroNoise, 3.0 , 0.1); //3.0- רעש חיישן GPS ממוצע
+	KalmanFilter KF(this->Latitude, this->Longitude, 0.0, this->AccelNoise, this->GyroNoise, 3.0 , 0.1f); //3.0- רעש חיישן GPS ממוצע
 
 	if (!inputFile.is_open()) {
 		globalPrint.printError("didn't success to open the file: GPS.txt");

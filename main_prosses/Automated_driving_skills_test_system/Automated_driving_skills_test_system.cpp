@@ -38,13 +38,16 @@ int main()
 	drivingRoute.getDirections("32.75514497433894,35.09988438222732", "32.750610905702,35.091979224811844");
 	vector<string> drivingRouteLines = drivingRoute.getInstructions();
 
-	// play sensors
+	string rcnnDataPath = "C:\\Users\\User\\ProjectEfratSh\\fasterRcnn\\Faster_R-CNN_new_tarin\\orginized_dataset\\output_model\\NewFolder";
+	string yoloDataPath = "C:\\Users\\User\\ProjectEfratSh\\YOLO\\Crosswalk_and_Pedestrians_dataset\\detectionsNewVideo";
+
+	// play sensors and threads
+	thread CNN(&Camera::processCNNDetections, &camera, rcnnDataPath, camera.getCnnObjectToActionMap(), 0.7);
+	thread yolo(&Camera::processYOLODetections, &camera, yoloDataPath, camera.getYoloObjectToActionMap(), 0.7);
 	thread imu_play(&IMU::IMUplay, &imu);
 	thread gps_play(&GPS::GPSplay, &gps); 
 	thread Lidar_play(&Lidar::processLidarData, &lidar, ref(car)); // בדיקת מרחק מרכב לפני
-	thread yolo(&Camera::processYOLODetections, &camera); 
 	thread lidarCarDistanceFront(&Lidar::monitorSafeDistance, &lidar, ref(car));
-	thread CNN(&Camera::processCNNDetections, &camera);
 	thread maxSpeed(&IMU::monitorMaxSpeed, &imu, ref(car)); // מהירות מקסימלית מותרת
 	thread roadLaneThread(&RoadLane::runLaneDetection, &roadLane, ref(car)); // נתיב נסיעה
 	thread DeviationDurationThread(&RoadLane::DeviationDuration, &roadLane, ref(car)); // משך סטיה ממרכז הנתיב

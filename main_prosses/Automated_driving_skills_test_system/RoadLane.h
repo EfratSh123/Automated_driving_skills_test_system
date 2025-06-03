@@ -12,7 +12,7 @@ class RoadLane
 public:
 	RoadLane();
 	float calculateLaneDeviation(const cv::Mat& binaryImg);
-	void DeviationDuration(Car& c) {};
+	void DeviationDuration(Car& c);
 	int runLaneDetection(Car& c);
 private:
 	globalFunc globalPrint;

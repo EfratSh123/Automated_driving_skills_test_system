@@ -13,6 +13,7 @@ using namespace std;
 class RoadSpeedInfo {
 public:
     RoadSpeedInfo();
+    //~RoadSpeedInfo();
      //pplx::task<web::json::value> sendHttpRequest(const std::wstring& url); // Add this line here
      pplx::task<std::pair<bool, int>> getSpeedLimit(double latitude, double longitude);
     //pplx::task<web::json::value> sendHttpRequest(const std::wstring& url); // Remove this line

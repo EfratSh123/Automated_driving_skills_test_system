@@ -10,13 +10,12 @@ class GPS;
 class KalmanFilter {
 public:
 	// constractor with restart matrices
-    KalmanFilter(double initial_x, float initial_y, float initial_yaw,
+    KalmanFilter(float initial_x, float initial_y, float initial_yaw,
         float imu_accel_noise, float imu_gyro_noise,
         float gps_pos_noise, float time_step);
 
     // פונקציית עיבוד הכוללת חיזוי ועדכון
     std::vector<float> process(IMU& imu_data, GPS& gps_data);
-
 private:
     // משתני המצב ומטריצות
     Eigen::VectorXd state;               // מצב: [x, y, vx, vy, yaw, yaw_rate_bias]

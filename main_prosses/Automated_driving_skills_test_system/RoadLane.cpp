@@ -8,7 +8,6 @@
 #include <filesystem>
 #include "Car.h"
 
-
 namespace fs = std::filesystem;
 using namespace cv;
 using namespace std;

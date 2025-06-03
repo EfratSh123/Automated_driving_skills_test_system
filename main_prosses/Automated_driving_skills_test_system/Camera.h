@@ -41,6 +41,10 @@ public:
 		const unordered_map<string, function<void()>>& cnnObjectToActionMap,
 		float minConfidence
 	);
+
+	unordered_map<string, function<void()>> getYoloObjectToActionMap() { lock_guard<std::mutex> lock(mtx_yoloObjectToActionMap); return yoloObjectToActionMap; };
+	unordered_map<string, function<void()>> getCnnObjectToActionMap() { lock_guard<std::mutex> lock(mtx_cnnObjectToActionMap); return cnnObjectToActionMap; };
+
 private:
 	Car car;
 	IMU* imu;
@@ -49,6 +53,7 @@ private:
 	{"pedestrian", [&]() { Camera::pedestrians(); }},
 	{"crosswalk",  [&]() { Camera::crosswalk(); }}
 	};
+	mutex mtx_yoloObjectToActionMap; 
 	unordered_map<string, function<void()>> cnnObjectToActionMap = {
 	{"red_light_left",      [&]() { if (car.getDirection() == "left")       Camera::redLight(); }},
 	{"red_light_right",     [&]() { if (car.getDirection() == "right")      Camera::redLight(); }},
@@ -69,4 +74,5 @@ private:
 	// תמרור הולכי רגל, יעזור מתי שלא מזהה טוב את המעבר חציה
 	//{"pedestrian",     [&]() { Camera::pedestrians(); }},
 	};
+	mutex mtx_cnnObjectToActionMap;
 };
