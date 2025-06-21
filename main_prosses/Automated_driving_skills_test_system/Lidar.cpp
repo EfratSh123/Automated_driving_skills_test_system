@@ -13,14 +13,12 @@
 #include <windows.h>
 #include <map>
 extern int grade; 
+extern std::mutex mtx_grade;
 using namespace std;
 #undef max // Prevent conflict with std::min or other methods named 'min'
 IMU imu1;
 extern bool onLidar;
-extern bool pass; 
-Lidar::Lidar() 
-{
-}
+Lidar::Lidar() {}
 // פונקציה לעיבוד נתוני לידאר, מציאת מרחק מינימלי ובדיקת מרחק בטוח
 void Lidar::processLidarData(Car& car) {
 	string filePath = "Lidar.txt";
@@ -56,7 +54,8 @@ void Lidar::processLidarData(Car& car) {
                 continue;
             }
         }
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+		car.setCarDistanceFront(minDistance); // עדכון מרחק הרכב מלפנים
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         scanIndex++;
     }
 
@@ -95,12 +94,13 @@ void Lidar::monitorSafeDistance(Car& car)
     // אם נכנס למרחק סכנה - קריאה מיידית לאירוע חריג
     if (currentDistance <= dangerDistance) {
         globalPrint.print("Danger! Too close to the vehicle ahead.");
-        imu1.manageDrivingEvent("too_near_distance");
-        pass = false;
+        imu1.manageDrivingEvent("too_near_distance", ref(car));
+        grade -= 10;
     }
     // אם החזיק מרחק לא בטוח לאורך זמן - הורדת ניקוד
     else if (closeSeconds > 5) {
         globalPrint.print("Maintained unsafe distance for " + std::to_string(closeSeconds) + " seconds.");
+        std::lock_guard<std::mutex> lock(mtx_grade);
         grade -= closeSeconds * 0.35;
     }
 }

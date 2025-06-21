@@ -1,77 +1,19 @@
 ﻿  Automated_driving_skills_test_system.cpp
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(68,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(70,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(76,18): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(82,34): warning C4101: 'e': unreferenced local variable
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(85,30): warning C4101: 'e': unreferenced local variable
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\type_traits(1711,77): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  (compiling source file 'Automated_driving_skills_test_system.cpp')
-      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\type_traits(1711,77):
-      the template instantiation context (the oldest one first) is
-          C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(45,12):
-          see reference to function template instantiation 'std::thread::thread<void(__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &,float),Camera*,std::string&,std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>>,double,0>(_Fn &&,Camera *&&,std::string &,std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &&,double &&)' being compiled
-          with
-          [
-              _Fn=void (__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &,float)
-          ]
-          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(93,9):
-          see reference to function template instantiation 'void std::thread::_Start<_Ty,Camera*,std::string&,std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>>,double>(_Fn &&,Camera *&&,std::string &,std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &&,double &&)' being compiled
-          with
-          [
-              _Ty=void (__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &,float),
-              _Fn=void (__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &,float)
-          ]
-          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(76,40):
-          see reference to function template instantiation 'unsigned int (__cdecl *std::thread::_Get_invoke<std::thread::_Start::_Tuple,0,1,2,3,4>(std::integer_sequence<size_t,0,1,2,3,4>) noexcept)(void *) noexcept' being compiled
-          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(67,17):
-          see reference to function template instantiation 'unsigned int std::thread::_Invoke<std::thread::_Start::_Tuple,0,1,2,3,4>(void *) noexcept' being compiled
-          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\thread(60,14):
-          see reference to function template instantiation 'void std::invoke<void(__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &,float),Camera*,std::basic_string<char,std::char_traits<char>,std::allocator<char>>,std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>>,double>(_Callable &&,_Ty1 &&,std::basic_string<char,std::char_traits<char>,std::allocator<char>> &&,std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &&,double &&) noexcept(false)' being compiled
-          with
-          [
-              _Callable=void (__cdecl Camera::* )(const std::string &,const std::unordered_map<std::string,std::function<void (void)>,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,std::function<void (void)>>>> &,float),
-              _Ty1=Camera *
-          ]
-  
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(94,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(96,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(102,18): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(109,34): warning C4101: 'e': unreferenced local variable
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(112,30): warning C4101: 'e': unreferenced local variable
   Camera.cpp
   Car.cpp
   DrivingRoute.cpp
-  func.cpp
+  EKF.cpp
   globalFunc.cpp
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\globalFunc.cpp(9,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   GPS.cpp
   IMU.cpp
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(52,51): warning C4244: 'argument': conversion from 'unsigned long' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(98,13): warning C4244: 'initializing': conversion from '_Ty' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(98,13): warning C4244:         with
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(98,13): warning C4244:         [
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(98,13): warning C4244:             _Ty=double
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(98,13): warning C4244:         ]
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(111,16): warning C4305: '=': truncation from 'double' to 'float'
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(112,15): warning C4305: '=': truncation from 'double' to 'float'
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(132,18): warning C4305: '=': truncation from 'double' to 'float'
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(133,17): warning C4305: '=': truncation from 'double' to 'float'
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(171,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(173,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  KalmanFilter.cpp
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(24,20): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(43,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(44,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(94,24): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(94,24): warning C4244:         with
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(94,24): warning C4244:         [
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(94,24): warning C4244:             _Ty=float
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(94,24): warning C4244:         ]
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(95,24): warning C4244: 'argument': conversion from 'double' to '_Ty', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(95,24): warning C4244:         with
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(95,24): warning C4244:         [
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(95,24): warning C4244:             _Ty=float
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(95,24): warning C4244:         ]
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(105,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(106,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(107,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(108,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(109,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\KalmanFilter.cpp(110,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(54,51): warning C4244: 'argument': conversion from 'unsigned long' to 'float', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(120,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Lidar.cpp
 C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(104,31): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\utility(263,54): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
@@ -86,18 +28,18 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.3443
   (compiling source file 'Lidar.cpp')
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\utility(263,54):
       the template instantiation context (the oldest one first) is
-          C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(72,9):
+          C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(71,9):
           see reference to function template instantiation 'std::pair<const int,float>::pair<int,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=int
           ]
-              C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(71,37):
+              C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(70,37):
               see the first reference to 'std::pair<const int,float>::pair' in 'Lidar::monitorSafeDistance'
   
   RoadLane.cpp
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\RoadLane.cpp(126,38): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\RoadLane.cpp(162,38): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
   RoadSpeedInfo.cpp
   Generating Code...
   Automated_driving_skills_test_system.vcxproj -> C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\x64\Debug\Automated_driving_skills_test_system.exe

@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\lib;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\debug\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\debug\lib;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,24 +120,23 @@
 brotlienc.lib;
 cpprest_2_10d.lib;
 cpr.lib
-;libcurl-d.lib
-;opencv_calib3d4.lib;
-opencv_core4.lib;
-opencv_dnn4.lib;
-opencv_features2d4.lib;
-opencv_flann4.lib
-;opencv_highgui4.lib;
-opencv_imgcodecs4.lib;
-opencv_imgproc4.lib;
-opencv_ml4.lib
-;opencv_objdetect4.lib;
-opencv_photo4.lib
-;opencv_stitching4.lib;
-opencv_video4.lib;
-opencv_videoio4.lib;
+;libcurl-d.lib;opencv_calib3d4d.lib;
+opencv_core4d.lib;
+opencv_dnn4d.lib;
+opencv_features2d4d.lib;
+opencv_flann4d.lib
+;opencv_highgui4d.lib;
+opencv_imgcodecs4d.lib;
+opencv_imgproc4d.lib;
+opencv_ml4d.lib
+;opencv_objdetect4d.lib;
+opencv_photo4d.lib
+;opencv_stitching4d.lib;
+opencv_video4d.lib;
+opencv_videoio4d.lib;
 quirc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\lib;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\debug\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\User\vcpkg\vcpkg\installed\x64-windows\debug\lib;C:\Users\User\vcpkg\vcpkg\installed\x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
@@ -164,11 +163,10 @@ quirc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="DrivingRoute.cpp" />
-    <ClCompile Include="func.cpp" />
+    <ClCompile Include="EKF.cpp" />
     <ClCompile Include="globalFunc.cpp" />
     <ClCompile Include="GPS.cpp" />
     <ClCompile Include="IMU.cpp" />
-    <ClCompile Include="KalmanFilter.cpp" />
     <ClCompile Include="Lidar.cpp" />
     <ClCompile Include="RoadLane.cpp" />
     <ClCompile Include="RoadSpeedInfo.cpp" />
@@ -177,11 +175,10 @@ quirc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="DrivingRoute.h" />
-    <ClInclude Include="func.h" />
+    <ClInclude Include="EKF.h" />
     <ClInclude Include="globalFunc.h" />
     <ClInclude Include="GPS.h" />
     <ClInclude Include="IMU.h" />
-    <ClInclude Include="KalmanFilter.h" />
     <ClInclude Include="Lidar.h" />
     <ClInclude Include="RoadLane.h" />
     <ClInclude Include="RoadSpeedInfo.h" />

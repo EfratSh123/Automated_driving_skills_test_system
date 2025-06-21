@@ -14,65 +14,49 @@ using namespace std;
 class Camera
 {
 public:
-	typedef void (Camera::* CameraFunction)();
-	typedef void (Camera::* SpeedLimitFunction)();
 	Camera();
-	void speedLimit(float speed);
+	// פונקציה חדשה לאתחול המאפים עם אובייקט Car
+	void initializeMaps(Car& carRef);
+
+	void speedLimit(float speed, Car& car);
 	vector<string> readFileLines(const string& filePath);
-	string getLatestFile(const string& folderPath);
-	void stopSign();
-	void greenLight();
-	void redLight();
-	void pedestrians();
-	void crosswalk();
-	void processDetections();
+	void stopSign( Car& car);
+	void greenLight( Car& car);
+	void redLight(Car& car);
+	void pedestrians(Car& car);
+	void crosswalk(Car& car);
 	void processDetectionFile(
-		const string& filePath,
-		const unordered_map<string, function<void()>>& objectToActionMap,
-		float minConfidence
-	);
-	void processYOLODetections(
-		const string& yoloDataPath,
-		const unordered_map<string, function<void()>>& yoloObjectToActionMap,
-		float minConfidence
-	);
-	void processCNNDetections(
-		const string& rcnnDataPath,
-		const unordered_map<string, function<void()>>& cnnObjectToActionMap,
-		float minConfidence
+		string& filePath,
+		unordered_map<string, function<void(Car&)>>& objectToActionMap,
+		float minConfidence,
+		Car& car
 	);
 
-	unordered_map<string, function<void()>> getYoloObjectToActionMap() { lock_guard<std::mutex> lock(mtx_yoloObjectToActionMap); return yoloObjectToActionMap; };
-	unordered_map<string, function<void()>> getCnnObjectToActionMap() { lock_guard<std::mutex> lock(mtx_cnnObjectToActionMap); return cnnObjectToActionMap; };
+	unordered_map<string, function<void(Car&)>>& getYoloObjectToActionMap() { lock_guard<std::mutex> lock(mtx_yoloObjectToActionMap); return yoloObjectToActionMap; };
+	unordered_map<string, function<void(Car&)>>& getCnnObjectToActionMap() { lock_guard<std::mutex> lock(mtx_cnnObjectToActionMap); return cnnObjectToActionMap; };
+
+	void runCNNModelLoop();
+	void runYoloModelLoop();
+	void processCNNFilesLoop(
+		string& rcnnDataPath,
+		unordered_map<string, function<void(Car&)>>& cnnObjectToActionMap,
+		float minConfidence,
+		Car& car
+	);
+
+	void processYoloFilesLoop(
+		string& yoloDataPath,
+		unordered_map<string, function<void(Car&)>>& yoloObjectToActionMap,
+		float minConfidence,
+		Car& car
+	);
 
 private:
-	Car car;
 	IMU* imu;
 	globalFunc globalPrint;
-	unordered_map<string, function<void()>> yoloObjectToActionMap = {
-	{"pedestrian", [&]() { Camera::pedestrians(); }},
-	{"crosswalk",  [&]() { Camera::crosswalk(); }}
-	};
-	mutex mtx_yoloObjectToActionMap; 
-	unordered_map<string, function<void()>> cnnObjectToActionMap = {
-	{"red_light_left",      [&]() { if (car.getDirection() == "left")       Camera::redLight(); }},
-	{"red_light_right",     [&]() { if (car.getDirection() == "right")      Camera::redLight(); }},
-	{"red_light",           [&]() { Camera::redLight(); }},
-	{"red_light_straight",  [&]() { if (car.getDirection() == "straight")   Camera::redLight(); }},
-	{"green_light",         [&]() { Camera::greenLight(); }},
-	{"green_light_left",    [&]() { if (car.getDirection() == "left")       Camera::greenLight(); }},
-	{"green_light_right",   [&]() { if (car.getDirection() == "right")      Camera::greenLight(); }},
-	{"green_light_straight",[&]() { if (car.getDirection() == "straight") Camera::greenLight(); }},
-	{"stop",				[&]() { Camera::stopSign(); }},
-	{"stop_trafic_singh",   [&]() { Camera::stopSign(); }},
-	{"speed_limit_20",      [&]() { Camera::speedLimit(20); }},
-	{"speed_limit_30",      [&]() { Camera::speedLimit(30); }},
-	{"speed_limit_60",     [&]() { Camera::speedLimit(60); } },
-	{"speed_limit_80",      [&]() { Camera::speedLimit(80); }},
-	{"speed_limit_100",     [&]() { Camera::speedLimit(100); }},
-	{"speed_limit_120",     [&]() { Camera::speedLimit(120); }},
-	// תמרור הולכי רגל, יעזור מתי שלא מזהה טוב את המעבר חציה
-	//{"pedestrian",     [&]() { Camera::pedestrians(); }},
-	};
+	unordered_map<string, function<void(Car&)>> yoloObjectToActionMap;
+	mutex mtx_yoloObjectToActionMap;
+
+	unordered_map<string, function<void(Car&)>> cnnObjectToActionMap;
 	mutex mtx_cnnObjectToActionMap;
 };

@@ -12,6 +12,7 @@ namespace fs = std::filesystem;
 using namespace cv;
 using namespace std;
 extern int grade; 
+extern std::mutex mtx_grade;
 
 // Function to calculate the path deviation in meters, based on a binary image of the path
 float RoadLane::calculateLaneDeviation(const cv::Mat& binaryImg) {
@@ -47,66 +48,100 @@ float RoadLane::calculateLaneDeviation(const cv::Mat& binaryImg) {
     float metersPerPixel = realLaneWidthMeters / static_cast<float>(laneWidthPixels); // Calculating how many meters each pixel is worth
 	return deviationPixels * metersPerPixel; // returning the deviation in meters
 }
+//
+//// Function that runs the path recognition process on a video
+//int RoadLane::runLaneDetection(Car& c) {
+//    VideoCapture cap("C:\\Users\\User\\ProjectEfratSh\\main_prosses\\videoTest.mp4");
+//    if (!cap.isOpened()) {
+//		globalPrint.printError("Error opening video file.");
+//        return -1;
+//    }
+//    int frameCount = 0;
+//    Mat frame;
+//    while (cap.read(frame))
+//    {
+//        // Preparing the frame for input to the lane recognition model - שמירת הפריים כתמונה זמנית
+//        ostringstream filename;
+//        filename << "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\temp\\input.jpg";
+//        imwrite(filename.str(), frame);
+//		// Run the lane detection model using Python
+//        ostringstream command;
+//        // לסדר את זה שירוץ על הסרטה *********
+//        command << "py -3.8 "
+//            << "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\test2.py"
+//            << " --img "
+//            << "\"" << filename.str() << "\" "
+//            << "--model "
+//            << "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\log\\best_model.pth";
+//        int result = system(command.str().c_str());
+//        if (result != 0)
+//        {
+//			globalPrint.printError("Lane detection failed on frame " + std::to_string(frameCount));
+//        }
+//         
+//		// Reading the binary output image
+//        string outputPath = "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\binary_output.jpg";
+//        Mat resultImg = imread(outputPath, IMREAD_GRAYSCALE);
+//        if (!resultImg.empty()) {
+//			// Calculate the lane deviation
+//            float deviation = calculateLaneDeviation(resultImg);
+//            c.setLaneDeviation(deviation);
+//			globalPrint.print("Frame " + frameCount + std::to_string(deviation) + " m");
+//        }
+//        else {
+//			globalPrint.printError("Could not read binary output for frame " + frameCount);
+//        }
+//        frameCount++;
+//		//remove the temporary image
+//        fs::remove(filename.str());
+//    }
+//
+//    // free video file
+//    cap.release();
+//    return 0;
+//}
 
-// Function that runs the path recognition process on a video
-int RoadLane::runLaneDetection(Car& c) {
-    VideoCapture cap("C:\\Users\\User\\ProjectEfratSh\\main_prosses\\111.mp4");
-    if (!cap.isOpened()) {
-		globalPrint.printError("Error opening video file.");
-        return -1;
-    }
-    int frameCount = 0;
-    Mat frame;
-    while (cap.read(frame))
-    {
-        // Preparing the frame for input to the lane recognition model - שמירת הפריים כתמונה זמנית
-        ostringstream filename;
-        filename << "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\temp\\input.jpg";
-        imwrite(filename.str(), frame);
-		// Run the lane detection model using Python
-        ostringstream command;
-        command << "py -3.13 "
-            << "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\test2.py"
-            << "--img "
-            << "\"" << filename.str() << "\" "
-            << "--model "
-            << "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\log\\best_model.pth";
-        int result = system(command.str().c_str());
-        if (result != 0)
-        {
-			globalPrint.printError("Lane detection failed on frame " + std::to_string(frameCount));
-        }
+int RoadLane::processLaneOutputLoop(Car& c) {
+    string outputDir = "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\output_video\\lane_output\\";
 
-        //this_thread::sleep_for(chrono::seconds(1));
-         
-		// Reading the binary output image
-        string outputPath = "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\binary_output.jpg";
-        Mat resultImg = imread(outputPath, IMREAD_GRAYSCALE);
-        if (!resultImg.empty()) {
-			// Calculate the lane deviation
-            float deviation = calculateLaneDeviation(resultImg);
-            c.setLaneDeviation(deviation);
-			globalPrint.print("Frame " + frameCount + std::to_string(deviation) + " m");
+    while (onLane) {
+        string latestFile = globalPrint.getLatestFile(outputDir); // מחזיר את הנתיב לקובץ האחרון
+
+        if (!latestFile.empty()) {
+            // קורא את קובץ התמונה האחרון כ־תמונה בגווני אפור
+			// שומר אותו ב Mat של OpenCVs
+            Mat resultImg = imread(latestFile, IMREAD_GRAYSCALE);
+            if (!resultImg.empty()) {
+                float deviation = calculateLaneDeviation(resultImg);
+                c.setLaneDeviation(deviation);
+                globalPrint.print("Detected deviation: " + to_string(deviation) + " m");
+            }
+            else {
+                globalPrint.printError("Failed to read image: " + latestFile);
+            }
+            // מחיקה
+            if (remove(latestFile.c_str()) != 0) {
+                globalPrint.printError("Failed to delete file: " + latestFile);
+            }
         }
         else {
-			globalPrint.printError("Could not read binary output for frame " + frameCount);
+            this_thread::sleep_for(chrono::milliseconds(100));
         }
-        frameCount++;
-		// remove the temporary image
-        //fs::remove(filename.str());
-
-        ////אם סטיה לא תקינה לעשות WHILE כל עוד הסטיה לא תקינה ולעלות טיימר של מונה שניות וכשיוצאים מהלולאה להוריד בניקוד לפי חישוב
-        //int timeDeviation = 0;
-        //while (c.getLaneDeviation() > 0.4f) {
-		//	globalPrint.print("Warning: Lane deviation too high: " + to_string(c.getLaneDeviation()) + " m");
-		//	this_thread::sleep_for(chrono::seconds(1));
-		//	timeDeviation++;
-		//}
     }
-
-    // free video file
-    cap.release();
     return 0;
+}
+
+void RoadLane::runLaneDetection() {
+    string scriptPath = "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\run_lane_detection_on_video.py";
+    string videoPath = "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\project_video.mp4";
+    string modelPath = "C:\\Users\\User\\ProjectEfratSh\\lanenet-lane-detection-pytorch-main\\log\\best_model.pth";
+    string outputDir = "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\output_video\\lane_output";
+    string command = "py -3.8 \"" + scriptPath + "\""
+        + " --video \"" + videoPath + "\""
+        + " --model \"" + modelPath + "\""
+        + " --output_dir \"" + outputDir + "\""
+        + " --model_type ENet";
+    system(command.c_str());
 }
 
 RoadLane::RoadLane()
@@ -123,6 +158,7 @@ void RoadLane::DeviationDuration(Car &c) {
     // לא בוצע מעבר נתיב אלא סטייה מהנתיב
 	if (timeDeviation > 6) {
 		globalPrint.print("Lane deviation duration: " + to_string(timeDeviation) + " seconds.");
+        std::lock_guard<std::mutex> lock(mtx_grade);
         grade -= timeDeviation * 0.3 + 5;
 	}
     timeDeviation = 0;

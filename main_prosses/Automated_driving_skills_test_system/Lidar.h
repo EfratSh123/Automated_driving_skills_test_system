@@ -6,7 +6,7 @@
 #include <mutex>
 using namespace std;
 
-class Lidar : public Car // Explicitly inherit from Car
+class Lidar		//: public Car // Explicitly inherit from Car
 {
 private:
 	//זווית אופקית (Azimuth)

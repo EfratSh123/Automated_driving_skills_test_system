@@ -39,16 +39,13 @@
     <ClCompile Include="DrivingRoute.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="func.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="globalFunc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RoadLane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="KalmanFilter.cpp">
+    <ClCompile Include="EKF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,16 +71,13 @@
     <ClInclude Include="DrivingRoute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="func.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="globalFunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RoadLane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KalmanFilter.h">
+    <ClInclude Include="EKF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

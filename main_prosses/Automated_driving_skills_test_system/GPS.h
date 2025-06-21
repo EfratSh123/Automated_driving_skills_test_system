@@ -1,7 +1,7 @@
 #pragma once
 #include <windows.h>
 #include "globalFunc.h"
-#include "KalmanFilter.h"
+#include "EKF.h"
 #include <mutex>
 #include <cmath>
 #include <Eigen/Dense>
@@ -17,10 +17,7 @@ public:
 	void setLongitude(float Longitude) { lock_guard<std::mutex> lock(mtx_longitude); this->Longitude = Longitude; }
 	float getLongitude() { lock_guard<std::mutex> lock(mtx_longitude); return Longitude; }
 
-	void setGyroNoise(float groNoise) { lock_guard<std::mutex> lock(mtx_GyroNoise); this->GyroNoise = groNoise; }
-	float getGyroNoise() { lock_guard<std::mutex> lock(mtx_GyroNoise); return GyroNoise; }
-	void setAccelNoise(float accelNoise) { lock_guard<std::mutex> lock(mtx_AccelNoise); this->AccelNoise = accelNoise; }
-	float getAccelNoise() { lock_guard<std::mutex> lock(mtx_AccelNoise); return AccelNoise; }
+	void setKalman(EKF* k) { kalman = k; }
 
 	//// פונקציה שממירה קואורדינטות GPS למערכת מקומית XY
 	//Eigen::Vector2d gps_to_local_xy(double latitude, double longitude);
@@ -34,8 +31,6 @@ private:
 	float Longitude;
 	mutex mtx_longitude;
 	globalFunc globalPrint;
-	float GyroNoise;
-	mutex mtx_GyroNoise;
-	float AccelNoise;
-	mutex mtx_AccelNoise;
+
+	EKF* kalman;
 };

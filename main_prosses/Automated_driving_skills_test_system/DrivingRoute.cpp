@@ -6,8 +6,7 @@
 #include <algorithm>
 
 using json = nlohmann::json;
-
-DrivingRoute::DrivingRoute(const std::string& apiKey) : apiKey_(apiKey) {}
+const std::string DrivingRoute::apiKey_ = "XXX";
 
 void DrivingRoute::getDirections(const std::string& origin, const std::string& destination) {
     std::string url = "https://maps.googleapis.com/maps/api/directions/json"
@@ -29,12 +28,23 @@ void DrivingRoute::getDirections(const std::string& origin, const std::string& d
     }
 
     json response = json::parse(r.text);
+    if (!response["status"].is_string()) {
+        globalPrint.printError("Google API Error: status field is not a string");
+        return;
+    }
     if (response["status"] != "OK") {
-        globalPrint.printError("Google API Error: " + response["status"]);
+        globalPrint.printError("Google API Error: " + response["status"].get<std::string>());
         return;
     }
 
+    if (!response.contains("routes") || response["routes"].empty() ||
+        !response["routes"][0].contains("legs") || response["routes"][0]["legs"].empty() ||
+        !response["routes"][0]["legs"][0].contains("steps") || response["routes"][0]["legs"][0]["steps"].empty()) {
+        globalPrint.printError("No steps found in response.");
+        return;
+    }
     auto steps = response["routes"][0]["legs"][0]["steps"];
+
     instructions_.clear();
 
 	globalPrint.print("driving rules: ");

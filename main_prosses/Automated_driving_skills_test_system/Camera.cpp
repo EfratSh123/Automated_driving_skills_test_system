@@ -15,50 +15,88 @@
 #include <filesystem>
 #include <windows.h>
 #undef min 
+extern int grade;
+extern std::mutex mtx_grade;
 
 namespace fs = std::filesystem;
 fs::path latestFile;
-extern bool pass; 
 using namespace std;
 extern bool onyolo;
 extern bool onCnn;
 
-Camera::Camera() : car(), imu(new IMU(&car))
-{
+Camera::Camera() {};
+
+// פונקציה חדשה לאתחול המאפים
+void Camera::initializeMaps(Car& carRef) {
+	// אתחול yoloObjectToActionMap
+	{
+		lock_guard<std::mutex> lock(mtx_yoloObjectToActionMap);
+		yoloObjectToActionMap = {
+			{"pedestrian", [this](Car& car) { this->pedestrians(car); }},
+			{"crosswalk",  [this](Car& car) { this->crosswalk(car); }}
+		};
+	}
+
+	// אתחול cnnObjectToActionMap
+	{
+		lock_guard<std::mutex> lock(mtx_cnnObjectToActionMap);
+		cnnObjectToActionMap = {
+			{"red_light_left",      [this](Car& car) { if (car.getDirection() == "left") this->redLight(car); }},
+			{"red_light_right",     [this](Car& car) { if (car.getDirection() == "right") this->redLight(car); }},
+			{"red_light",           [this](Car& car) { this->redLight(car); }},
+			{"red_light_straight",  [this](Car& car) { if (car.getDirection() == "straight") this->redLight(car); }},
+			{"green_light",         [this](Car& car) { this->greenLight(car); }},
+			{"green_light_left",    [this](Car& car) { if (car.getDirection() == "left") this->greenLight(car); }},
+			{"green_light_right",   [this](Car& car) { if (car.getDirection() == "right") this->greenLight(car); }},
+			{"green_light_straight",[this](Car& car) { if (car.getDirection() == "straight") this->greenLight(car); }},
+			{"stop",                [this](Car& car) { this->stopSign(car); }},
+			{"stop_trafic_singh",   [this](Car& car) { this->stopSign(car); }},
+			{"speed_limit_20",      [this](Car& car) { this->speedLimit(20, car); }},
+			{"speed_limit_30",      [this](Car& car) { this->speedLimit(30, car); }},
+			{"speed_limit_60",      [this](Car& car) { this->speedLimit(60, car); }},
+			{"speed_limit_80",      [this](Car& car) { this->speedLimit(80, car); }},
+			{"speed_limit_100",     [this](Car& car) { this->speedLimit(100,car); }},
+			{"speed_limit_120",     [this](Car& car) { this->speedLimit(120,car); }},
+			// {"pedestrian",        [&carRef, this]() { this->pedestrians(carRef); }}, // תמרור הולכי רגל, יעזור מתי שלא מזהה טוב את המעבר חציה
+		};
+	}
 }
 
-void Camera::speedLimit(float speed) {
+void Camera::speedLimit(float speed, Car& car) {
 	globalPrint.print("Speed limit detected: " + to_string(speed) + " km/h");
 	car.setMaxSpeed(speed);
 }
 
-void Camera::stopSign() {
-	imu->manageDrivingEvent("stop");
+void Camera::stopSign(Car& car) {
+	imu->manageDrivingEvent("stop", ref(car));
 }
 
-void Camera::greenLight() {
+void Camera::greenLight(Car& car) {
 	globalPrint.print("Traffic light is green. Proceeding.");
-	if (car.getSpeed() <= 0) {
-		// *****************
+	// אם לאחר שתי שניות הוא עדיין לא המשיך למרות שאין לפניו רכב שתוקע אותו- להוריד ניקוד
+	this_thread::sleep_for(chrono::seconds(2));
+	if (car.getSpeed() <= 0 && car.getCarDistanceFront() > 50) {
+		std::lock_guard<std::mutex> lock(mtx_grade);
+		grade -= 5; // הורדת ניקוד על עצירה מיותרת ברמזור ירוק
 	}
 }
 
-void Camera::redLight() {
-	imu->manageDrivingEvent("red_light");
+void Camera::redLight(Car& car) {
+	imu->manageDrivingEvent("red_light", ref(car));
 }
 
-void Camera::pedestrians() {
+void Camera::pedestrians(Car& car) {
 	globalPrint.print("Pedestrian detected. Stopping.");
 	// בדיקת מיקום האנשים- אם הוא על הכביש לעצור
-	// ********************************************
+	// *************************************************************************************
 	//imu->manageDrivingEvent("pedestrian");
 }
 
-void Camera::crosswalk() {
+void Camera::crosswalk(Car& car) {
 	globalPrint.print("Crosswalk detected. Slowing down.");
 	// זימון פונקצית האטה, אם יש אנשים הוא יזהה אנשים ויזמן דרכם פונקצית עצירה
-	// *********************************************
-	imu->manageDrivingEvent("crosswalk");
+	// *************************************************************************************
+	imu->manageDrivingEvent("crosswalk", ref(car));
 }
 
 // פונקציה עזר לקריאת קובץ טקסט והחזרת וקטור של שורות
@@ -78,103 +116,97 @@ vector<string>  Camera::readFileLines(const string& filePath) {
 	return lines;
 }
 
-// פונקציה לקבלת הנתיב של הקובץ האחרון שנוצר בתיקייה
-string Camera::getLatestFile(const string& folderPath) {
-	fs::path latestFile;
-	auto latestWriteTime = fs::file_time_type::min();
-	if (fs::exists(folderPath) && fs::is_directory(folderPath)) {
-		for (const auto& entry : fs::directory_iterator(folderPath)) {
-			if (fs::is_regular_file(entry.path())) {
-				auto writeTime = fs::last_write_time(entry.path());
-				if (writeTime > latestWriteTime) {
-					latestWriteTime = writeTime;
-					latestFile = entry.path();
-				}
-			}
-		}
-	}
-	return latestFile.string();
-}
-
-//עיבוד קבצי זיהוי YOLO
-void Camera::processYOLODetections(
-	const string& yoloDataPath,
-	const unordered_map<string, function<void()>>& yoloObjectToActionMap,
-	float minConfidence
-) {
-	// זימון מודל יולו על הסרטה
-	string videoPath = "C:\\Users\\User\\ProjectEfratSh\\YOLO\\Crosswalk_and_Pedestrians_dataset\\12345.mp4";
-	string yoloScript = "C:\\Users\\User\\ProjectEfratSh\\YOLO\\Crosswalk_and_Pedestrians_dataset\\try_model_video.py";
-	string yoloCommand = "python \"" + yoloScript + "\" --video \"" + videoPath + "\"";
-	system(yoloCommand.c_str());
-
-	string latestYoloFile;
-	while (onyolo) {
-		latestYoloFile = getLatestFile(yoloDataPath);
-		if (!latestYoloFile.empty()) {
-			processDetectionFile(latestYoloFile, yoloObjectToActionMap, minConfidence);
-		}
-		this_thread::sleep_for(chrono::seconds(1));
-	}
-}
-// עיבוד קבצי זיהוי R-CNN
-void Camera::processCNNDetections(
-	const string& rcnnDataPath,
-	const unordered_map<string, function<void()>>& cnnObjectToActionMap,
-	float minConfidence
-) {
-	string latestRcnnFile;
-	// זימון מודל CNN על ההסרטה
-	string videoPath = "C:\\Users\\User\\ProjectEfratSh\\fasterRcnn\\Faster_R-CNN_new_tarin\\orginized_dataset\\211.mp4";
-	string cnnScript = "C:\\Users\\User\\ProjectEfratSh\\fasterRcnn\\Faster_R-CNN_new_tarin\\orginized_dataset\\valid.py";
-	string cnnCommand = "python \"" + cnnScript + "\" --video \"" + videoPath + "\"";
-	system(cnnCommand.c_str());
-
-	while (onCnn) {
-		latestRcnnFile = getLatestFile(rcnnDataPath);
-		if (!latestRcnnFile.empty()) {
-			processDetectionFile(latestRcnnFile, cnnObjectToActionMap, minConfidence);
-		}
-		this_thread::sleep_for(chrono::seconds(1));
-	}
-}
-
 void Camera::processDetectionFile(
-	const string& filePath,
-	const unordered_map<string, function<void()>>& objectToActionMap,
-	float minConfidence
+	string& filePath,
+	unordered_map<string, function<void(Car&)>>& objectToActionMap,
+	float minConfidence, 
+	Car& car
 ) {
-	if (filePath.empty()) {
-		return;
-	}
+	if (filePath.empty()) return;
+
 	globalPrint.print("Processing detection file: " + filePath);
 	vector<string> lines = readFileLines(filePath);
 	for (const string& line : lines) {
 		stringstream ss(line);
 		string objectName;
-		float confidence;
-		vector<float> boundingBox(4);
-		if (ss >> objectName >> boundingBox[0] >> boundingBox[1] >> boundingBox[2] >> boundingBox[3] >> confidence) {
-			if (confidence >= minConfidence) {
-				globalPrint.print("Detected: " + objectName + " (Confidence: " + to_string(confidence) + ")");
-				// חיפוש במפה
-				if (objectToActionMap.count(objectName)) {
-					objectToActionMap.at(objectName)();
-				}
-				else {
-					globalPrint.printError("Invalid format in detection line: " + line);
-				}
-			}
+		float x, y, w, h, confidence;
+		if (ss >> objectName >> confidence >> x >> y >> w >> h) {
+			std::cout << "Parsed: " << objectName << " " << confidence << " " << x << " " << y << " " << w << " " << h << std::endl;
+			if (confidence >= minConfidence && (objectToActionMap.count(objectName)))
+				objectToActionMap.at(objectName)(car);
+			else
+				globalPrint.printError("Invalid format in detection line: " + line);
+		}
+		else {
+			std::cout << "Failed to parse line!" << std::endl;
 		}
 	}
 }
 
-void Camera::processDetections() {
-	const float MIN_CONFIDENCE = 0.70f;
-	string yoloDataPath = "C:\\Users/User\\ProjectEfratSh\\YOLO\\Crosswalk_and_Pedestrians_dataset\\try_model\\new_folder\\labels_simple";
-	string rcnnDataPath = "C:\\Users\\User\\ProjectEfratSh\\YOLO\\Crosswalk_and_Pedestrians_dataset\\labels_simple";
-	// קריאה ישירה לפונקציות העיבוד
-	processYOLODetections(yoloDataPath, yoloObjectToActionMap, MIN_CONFIDENCE);
-	processCNNDetections(rcnnDataPath, cnnObjectToActionMap, MIN_CONFIDENCE);
-	globalPrint.print("Camera: YOLO and CNN detections processed sequentially.");
+void Camera::runCNNModelLoop() {
+	string videoPath = "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\videoTest.mp4";
+	string cnnScript = "C:\\Users\\User\\ProjectEfratSh\\fasterRcnn\\Faster_R-CNN_new_tarin\\orginized_dataset\\try_model_on_video.py";
+	string cnnCommand = "python \"" + cnnScript + "\" --video \"" + videoPath + "\"";
+	system(cnnCommand.c_str());
+}
+
+void Camera::runYoloModelLoop() {
+	string videoPath = "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\videoTest.mp4";
+	string yoloScript = "C:\\Users\\User\\ProjectEfratSh\\YOLO\\Crosswalk_and_Pedestrians_dataset\\try_model_video_text.py";
+	string yoloCommand = "python \"" + yoloScript + "\" --video \"" + videoPath + "\"";
+	system(yoloCommand.c_str());
+}
+
+void Camera::processCNNFilesLoop(
+	string& rcnnDataPath,
+	unordered_map<string, function<void(Car&)>>& cnnObjectToActionMap,
+	float minConfidence, 
+	Car& car
+) {
+	while (onCnn) {
+		string latestFile = globalPrint.getLatestFile(rcnnDataPath);
+
+		if (!latestFile.empty()) {
+			processDetectionFile(latestFile, cnnObjectToActionMap, minConfidence, ref(car));
+
+			// מחיקת הקובץ לאחר עיבוד
+			if (remove(latestFile.c_str()) != 0) {
+				globalPrint.printError("Failed to delete file: " + latestFile);
+			}
+			else {
+				globalPrint.print("Deleted file: " + latestFile);
+			}
+		}
+		else {
+			// אין קובץ חדש – נחכה רגע
+			this_thread::sleep_for(chrono::seconds(1));
+		}
+	}
+}
+
+void Camera::processYoloFilesLoop(
+	string& yoloDataPath,
+	unordered_map<string, function<void(Car&)>>& yoloObjectToActionMap,
+	float minConfidence, 
+	Car& car
+) {
+	while (onCnn) {
+		string latestFile = globalPrint.getLatestFile(yoloDataPath);
+
+		if (!latestFile.empty()) {
+			processDetectionFile(latestFile, yoloObjectToActionMap, minConfidence, ref(car));
+
+			// מחיקת הקובץ לאחר עיבוד
+			if (remove(latestFile.c_str()) != 0) {
+				globalPrint.printError("Failed to delete file: " + latestFile);
+			}
+			else {
+				globalPrint.print("Deleted file: " + latestFile);
+			}
+		}
+		else {
+			// אין קובץ חדש – נחכה רגע
+			this_thread::sleep_for(chrono::seconds(1));
+		}
+	}
 }
