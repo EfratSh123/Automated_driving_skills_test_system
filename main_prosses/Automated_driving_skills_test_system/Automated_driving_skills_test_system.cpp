@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 #include "IMU.h"
 #include "Lidar.h"
 #include "GPS.h"
@@ -58,9 +59,8 @@ int main()
 	thread lidarCarDistanceFront(&Lidar::monitorSafeDistance, &lidar, ref(car));
 	thread maxSpeed(&IMU::monitorMaxSpeed, &imu, ref(car)); // מהירות מקסימלית מותרת
 	thread roadLaneRunner(&RoadLane::runLaneDetection, &roadLane); // נתיב נסיעה
-	thread roadLaneProcessor(&RoadLane::processLaneOutputLoop, &roadLane, ref(car)); // נתיב נסיעה
-
-	//thread DeviationDurationThread(&RoadLane::DeviationDuration, &roadLane, ref(car)); // משך סטיה ממרכז הנתיב
+	thread roadLaneProcessor(&RoadLane::processLaneOutputLoop, &roadLane, ref(car)); 
+	thread DeviationDurationThread(&RoadLane::DeviationDuration, &roadLane, ref(car)); // משך סטיה ממרכז הנתיב
 
 	thread cnnRunner(&Camera::runCNNModelLoop, &camera);
 	thread cnnProcessor(&Camera::processCNNFilesLoop, &camera, ref(rcnnDataPath), ref(camera.getCnnObjectToActionMap()), 0.7f, ref(car));
@@ -69,53 +69,49 @@ int main()
 
 	globalFunc globalPrint;
 
-	//מעבר על הלולאה של ההוראות
+	//מעבר על ההוראות
+	string distanceStr, units, direction;
+	smatch match;
+	regex dirRegex(R"(Turn\s+(right|left)|Continue\s+(straight))"); // יצירת regex לחילוץ כיוון
 	for (const string& line : drivingRouteLines)
 	{
-		istringstream iss(line.substr(4)); // צור זרם ממחרוזת החלק שאחרי "in: "
-		string distanceStr, units, direction;
+		if (line.length() > 4) // נוודא שהשורה לא קצרה מדי
+		{
+			istringstream iss(line.substr(4)); // צור זרם ממחרוזת החלק שאחרי "in: "
+			if ((iss >> distanceStr >> units)) {
+				float meters = 0.0;
+				try {
+					double distance = stod(distanceStr);
+					meters = distance;
+					if (units == "km") meters = distance * 1000.0;
+					car.setMeters(meters);
 
-		cout << "check line: " << line << endl;
-		
-		if (line.length() <= 4) {
-			cout << "too short line: " << line << endl;
-			continue;
-		}
-		//istringstream iss(line.substr(4));
-		//string distanceStr, units, direction;
-		if (!(iss >> distanceStr >> units)) {
-			cout << "invalid format in kine: " << line << endl;
-			continue;
-		}
-		//iss >> distanceStr >> units >> ws; // קרא את המרחק, היחידות ודלג על רווחים לבנים
-		float meters = 0.0;
-		try {
-			double distance = stod(distanceStr);
-			meters = distance;
-			if (units == "km") {
-				meters = distance * 1000.0;
+					getline(iss >> ws, direction);  // קורא את ההוראה המלאה לצורך חילוץ כיוון
+					if (regex_search(direction, match, dirRegex)) { // חיפוש הכיוון בהוראה
+						if (match[1].matched) 
+							car.setDirection(match[1]);  // right / left
+						else if (match[2].matched)
+							car.setDirection(match[2]);  // straight
+					}
+					ostringstream oss;
+					oss << "direction: " << direction << ", meters: " << fixed << setprecision(2) << meters;
+					globalPrint.print(oss.str());
+				}
+				catch (const invalid_argument& e) {
+					globalPrint.printError("Invalid distance: " + line);
+				}
+				catch (const out_of_range& e) {
+					globalPrint.printError("Too great a distance: " + line);
+				}
+
+				while (car.getDistance() < car.getMeters()); // כל עוד לא הגיע זמן הפניה הבאה
+				this_thread::sleep_for(chrono::seconds(1));
 			}
-			//else {
-			//	globalPrint.printError("Unknown distance units in a row: " + line);
-			//	continue; // pass the next line
-			//}
-			car.setMeters(meters);
-			getline(iss >> ws, direction); // קרא את שאר השורה ככיוון
-			car.setDirection(direction);
-			std::ostringstream oss;
-			oss << "direction: " << direction << ", meters: " << fixed << setprecision(2) << meters;
-			globalPrint.print(oss.str());
+			else
+				globalPrint.printError("invalid format in line: " + line);
 		}
-		catch (const invalid_argument& e) {
-			globalPrint.printError("Invalid distance: " + line);
-		}
-		catch (const out_of_range& e) {
-			globalPrint.printError("Too great a distance: " + line);
-		}
-
-		while (car.getDistance() < car.getMeters()); // כל עוד לא הגיע זמן הפניה הבאה
-
-		this_thread::sleep_for(chrono::seconds(1));
+		else 
+			globalPrint.printError("Invalid instruction line: " + line);
 	}
 	onyolo = false;
 	onCnn = false;
@@ -136,7 +132,7 @@ int main()
 	roadLaneProcessor.join();
 	roadLaneRunner.join();
 
-	//DeviationDurationThread.join();
+	DeviationDurationThread.join();
 	lidarCarDistanceFront.join();
 
 	if (grade >= 90)

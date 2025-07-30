@@ -6,23 +6,20 @@
 #include <chrono>
 #include <thread>
 #define M_PI 3.14159265358979323846
-
+extern bool onGPS;
 using namespace std;
 GPS::GPS() {};
 
 void GPS::GPSplay()
 {
-	// Create an input file stream
-	std::ifstream inputFile("GPS.txt");
+	ifstream inputFile("GPS.txt");
 	if (!inputFile.is_open()) {
 		globalPrint.printError("didn't success to open the file: GPS.txt");
 		return;
 	}
 	string line;
-	//read the file line by line
-	while (std::getline(inputFile, line)) {
-		// Create a stringstream object to easily parse the current line
-		std::stringstream ss(line);
+	while (onGPS && getline(inputFile, line)) {
+		stringstream ss(line);
 		float latitude, longitude;
 		char delimiter;
 		if (ss >> longitude >> delimiter >> latitude && delimiter == ',') {

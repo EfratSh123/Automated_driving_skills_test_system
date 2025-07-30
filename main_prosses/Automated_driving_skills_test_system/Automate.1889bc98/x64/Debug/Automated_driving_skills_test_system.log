@@ -1,9 +1,9 @@
 ﻿  Automated_driving_skills_test_system.cpp
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(94,13): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(96,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(102,18): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(109,34): warning C4101: 'e': unreferenced local variable
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(112,30): warning C4101: 'e': unreferenced local variable
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(85,15): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(86,43): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(87,20): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(100,36): warning C4101: 'e': unreferenced local variable
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Automated_driving_skills_test_system.cpp(103,32): warning C4101: 'e': unreferenced local variable
   Camera.cpp
   Car.cpp
   DrivingRoute.cpp
@@ -12,10 +12,10 @@ C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\A
 C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\globalFunc.cpp(9,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   GPS.cpp
   IMU.cpp
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(54,51): warning C4244: 'argument': conversion from 'unsigned long' to 'float', possible loss of data
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(120,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(51,51): warning C4244: 'argument': conversion from 'unsigned long' to 'float', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\IMU.cpp(117,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Lidar.cpp
-C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(104,31): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(101,31): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\utility(263,54): warning C4244: 'initializing': conversion from '_Ty' to '_Ty2', possible loss of data
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\utility(263,54): warning C4244:         with
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\utility(263,54): warning C4244:         [
@@ -28,14 +28,14 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.3443
   (compiling source file 'Lidar.cpp')
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.42.34433\include\utility(263,54):
       the template instantiation context (the oldest one first) is
-          C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(71,9):
+          C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(68,9):
           see reference to function template instantiation 'std::pair<const int,float>::pair<int,int,0>(_Other1 &&,_Other2 &&) noexcept' being compiled
           with
           [
               _Other1=int,
               _Other2=int
           ]
-              C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(70,37):
+              C:\Users\User\ProjectEfratSh\main_prosses\Automated_driving_skills_test_system\Lidar.cpp(67,37):
               see the first reference to 'std::pair<const int,float>::pair' in 'Lidar::monitorSafeDistance'
   
   RoadLane.cpp

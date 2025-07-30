@@ -13,12 +13,13 @@
 #include <windows.h>
 #include <map>
 extern int grade; 
-extern std::mutex mtx_grade;
+extern mutex mtx_grade;
 using namespace std;
-#undef max // Prevent conflict with std::min or other methods named 'min'
+#undef max
 IMU imu1;
 extern bool onLidar;
 Lidar::Lidar() {}
+
 // פונקציה לעיבוד נתוני לידאר, מציאת מרחק מינימלי ובדיקת מרחק בטוח
 void Lidar::processLidarData(Car& car) {
 	string filePath = "Lidar.txt";
@@ -28,43 +29,39 @@ void Lidar::processLidarData(Car& car) {
         return;
     }
     string line;
-    int scanIndex = 0;
-    while (onLidar) {
+    while (onLidar && getline(inputFile, line)) {
         // יצירת זרם מחרוזת כדי לפצל את השורה למרחקים וזוויות
         istringstream ss(line);
         string token;
-        float minDistance = numeric_limits<float>::max(); // Initialize the minimum distance to the largest possible value
-        float minAngle = 0.0f; // Initialize minimum distance angle
-        bool vehicleDetected = false; // Flag if a car is detected nearby
-        while (ss >> token) {
+        float minDistance = numeric_limits<float>::max();
+        float minAngle = 0.0f;
+        while (ss >> token) {   // read each word in the line
             size_t colonPos = token.find(':');
-			if (colonPos == string::npos) continue; // invalid format
-			string angleStr = token.substr(0, colonPos); // extract angle
-			string distanceStr = token.substr(colonPos + 1); // extract distance
-            try {
-                // convert to float
-                float angle = stof(angleStr);
-                float distance = stof(distanceStr);
-                if (angle >= -30.0f && angle <= 30.0f && distance < minDistance) {
+			if (colonPos != string::npos) {     // If the format is invalid, returns "Not found"
+                string angleStr = token.substr(0, colonPos); // extract angle
+                string distanceStr = token.substr(colonPos + 1); // extract distance
+                try {
+                    // convert to float
+                    float angle = stof(angleStr);
+                    float distance = stof(distanceStr);
+                    if (angle >= -30.0f && angle <= 30.0f && distance < minDistance) {
                         minDistance = distance;
                         minAngle = angle;
+                    }
+                }
+                catch (...) {
+                    continue;
                 }
             }
-            catch (...) {
-                continue;
-            }
         }
-		car.setCarDistanceFront(minDistance); // עדכון מרחק הרכב מלפנים
+        car.setCarDistanceFront(minDistance); // Updating the distance of the car in front
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        scanIndex++;
     }
-
     inputFile.close();
 }
 
 void Lidar::monitorSafeDistance(Car& car)
 {
-    // מהירות הרכב הנוכחית
     float speed = car.getSpeed();
     // טבלת מרחקי עצירה (תגובה + בלימה) לפי מהירות בקמ"ש
     map<int, float> stopDistances = {
@@ -84,16 +81,16 @@ void Lidar::monitorSafeDistance(Car& car)
     float safeDistance = totalStopDist * 0.8f;    // מתחת לזה - לא בטוח
     float dangerDistance = totalStopDist * 0.4f;  // מתחת לזה - סכנת התנגשות
     int closeSeconds = 0;  // מונה שניות של מרחק לא בטוח
-    float currentDistance = car.getCarDistanceFront(); // מרחק מהרכב מלפנים
-    // לולאה: כל עוד המרחק קטן מהבטוח אבל לא מסוכן - נחשב כמה זמן לא בטוח
+    float currentDistance = car.getCarDistanceFront();
+    // כל עוד המרחק קטן מהבטוח אבל לא מסוכן - נחשב כמה זמן לא בטוח
     while (currentDistance < safeDistance && currentDistance > dangerDistance) {
         closeSeconds++;
         this_thread::sleep_for(std::chrono::seconds(1));
-        currentDistance = car.getCarDistanceFront(); // עדכון מרחק מהחיישן
+        currentDistance = car.getCarDistanceFront();
     }
-    // אם נכנס למרחק סכנה - קריאה מיידית לאירוע חריג
+    // אם נכנס למרחק סכנה - בלימה
     if (currentDistance <= dangerDistance) {
-        globalPrint.print("Danger! Too close to the vehicle ahead.");
+        globalPrint.print("Danger! Too close to the car ahead.");
         imu1.manageDrivingEvent("too_near_distance", ref(car));
         grade -= 10;
     }

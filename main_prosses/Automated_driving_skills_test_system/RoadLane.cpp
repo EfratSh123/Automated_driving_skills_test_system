@@ -8,16 +8,16 @@
 #include <filesystem>
 #include "Car.h"
 
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 using namespace cv;
 using namespace std;
 extern int grade; 
-extern std::mutex mtx_grade;
+extern mutex mtx_grade;
 
 // Function to calculate the path deviation in meters, based on a binary image of the path
 float RoadLane::calculateLaneDeviation(const cv::Mat& binaryImg) {
-    const float realLaneWidthMeters = 3.5f;  // רוחב נתיב קבוע
-    int y = binaryImg.rows * 3 / 4; // אזור בו נחפש את הנתיב ברבע התחתון של התמונה
+    const float roalLaneWidthMeters = 3.5f;  // רוחב נתיב קבוע
+    int y = binaryImg.rows * 3 / 4; // אזור בו נחפש את הנתיב - ברבע התחתון של התמונה
     int leftEdge = -1, rightEdge = -1; // right and Left lane edges
     int sumX = 0, count = 0;
     // Loop over the pixels in the selected row
@@ -31,7 +31,7 @@ float RoadLane::calculateLaneDeviation(const cv::Mat& binaryImg) {
             rightEdge = x;
         }
     }
-    // In case no lane or partial lane is detected - לא זוהה נתיב או זוהה נתיב חלקי
+    // לא זוהה נתיב או זוהה נתיב חלקי
     if (leftEdge == rightEdge) {
 		globalPrint.printError("Warning: Incomplete or missing lane detection. Deviation not computed.");
         return 0.0f;
@@ -45,7 +45,7 @@ float RoadLane::calculateLaneDeviation(const cv::Mat& binaryImg) {
     int laneCenter = sumX / count; 
     int imageCenter = binaryImg.cols / 2;
 	int deviationPixels = laneCenter - imageCenter;
-    float metersPerPixel = realLaneWidthMeters / static_cast<float>(laneWidthPixels); // Calculating how many meters each pixel is worth
+    float metersPerPixel = roalLaneWidthMeters / static_cast<float>(laneWidthPixels); // Calculating how many meters each pixel is worth
 	return deviationPixels * metersPerPixel; // returning the deviation in meters
 }
 //
@@ -105,10 +105,10 @@ int RoadLane::processLaneOutputLoop(Car& c) {
     string outputDir = "C:\\Users\\User\\ProjectEfratSh\\main_prosses\\Automated_driving_skills_test_system\\output_video\\lane_output\\";
 
     while (onLane) {
-        string latestFile = globalPrint.getLatestFile(outputDir); // מחזיר את הנתיב לקובץ האחרון
+        string latestFile = globalPrint.getLatestFile(outputDir);
 
         if (!latestFile.empty()) {
-            // קורא את קובץ התמונה האחרון כ־תמונה בגווני אפור
+            // קורא את קובץ התמונה האחרון כתמונה בגווני אפור
 			// שומר אותו ב Mat של OpenCVs
             Mat resultImg = imread(latestFile, IMREAD_GRAYSCALE);
             if (!resultImg.empty()) {
@@ -155,10 +155,10 @@ void RoadLane::DeviationDuration(Car &c) {
         this_thread::sleep_for(chrono::seconds(1));
         timeDeviation++;
     }
-    // לא בוצע מעבר נתיב אלא סטייה מהנתיב
+    // לא בוצע מעבר נתיב אלא סטייה משמעותית מהנתיב
 	if (timeDeviation > 6) {
 		globalPrint.print("Lane deviation duration: " + to_string(timeDeviation) + " seconds.");
-        std::lock_guard<std::mutex> lock(mtx_grade);
+        lock_guard<mutex> lock(mtx_grade);
         grade -= timeDeviation * 0.3 + 5;
 	}
     timeDeviation = 0;

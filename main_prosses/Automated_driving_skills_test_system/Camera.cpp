@@ -16,9 +16,9 @@
 #include <windows.h>
 #undef min 
 extern int grade;
-extern std::mutex mtx_grade;
+extern mutex mtx_grade;
 
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 fs::path latestFile;
 using namespace std;
 extern bool onyolo;
@@ -26,20 +26,16 @@ extern bool onCnn;
 
 Camera::Camera() {};
 
-// פונקציה חדשה לאתחול המאפים
 void Camera::initializeMaps(Car& carRef) {
-	// אתחול yoloObjectToActionMap
 	{
-		lock_guard<std::mutex> lock(mtx_yoloObjectToActionMap);
+		lock_guard<mutex> lock(mtx_yoloObjectToActionMap);
 		yoloObjectToActionMap = {
 			{"pedestrian", [this](Car& car) { this->pedestrians(car); }},
 			{"crosswalk",  [this](Car& car) { this->crosswalk(car); }}
 		};
 	}
-
-	// אתחול cnnObjectToActionMap
 	{
-		lock_guard<std::mutex> lock(mtx_cnnObjectToActionMap);
+		lock_guard<mutex> lock(mtx_cnnObjectToActionMap);
 		cnnObjectToActionMap = {
 			{"red_light_left",      [this](Car& car) { if (car.getDirection() == "left") this->redLight(car); }},
 			{"red_light_right",     [this](Car& car) { if (car.getDirection() == "right") this->redLight(car); }},
@@ -76,8 +72,8 @@ void Camera::greenLight(Car& car) {
 	// אם לאחר שתי שניות הוא עדיין לא המשיך למרות שאין לפניו רכב שתוקע אותו- להוריד ניקוד
 	this_thread::sleep_for(chrono::seconds(2));
 	if (car.getSpeed() <= 0 && car.getCarDistanceFront() > 50) {
-		std::lock_guard<std::mutex> lock(mtx_grade);
-		grade -= 5; // הורדת ניקוד על עצירה מיותרת ברמזור ירוק
+		lock_guard<mutex> lock(mtx_grade);
+		grade -= 4; // הורדת ניקוד על עצירה מיותרת ברמזור ירוק
 	}
 }
 
@@ -88,14 +84,14 @@ void Camera::redLight(Car& car) {
 void Camera::pedestrians(Car& car) {
 	globalPrint.print("Pedestrian detected. Stopping.");
 	// בדיקת מיקום האנשים- אם הוא על הכביש לעצור
-	// *************************************************************************************
+	// ***
 	//imu->manageDrivingEvent("pedestrian");
 }
 
 void Camera::crosswalk(Car& car) {
 	globalPrint.print("Crosswalk detected. Slowing down.");
-	// זימון פונקצית האטה, אם יש אנשים הוא יזהה אנשים ויזמן דרכם פונקצית עצירה
-	// *************************************************************************************
+	// זימון פונקצית האטה, אם	יש אנשים הוא יזהה אנשים ויזמן דרכם פונקצית עצירה
+	// ***
 	imu->manageDrivingEvent("crosswalk", ref(car));
 }
 
@@ -131,7 +127,7 @@ void Camera::processDetectionFile(
 		string objectName;
 		float x, y, w, h, confidence;
 		if (ss >> objectName >> confidence >> x >> y >> w >> h) {
-			std::cout << "Parsed: " << objectName << " " << confidence << " " << x << " " << y << " " << w << " " << h << std::endl;
+			globalPrint.print("Parsed: " + objectName + " " + to_string(confidence) + " " + to_string(x) + " " + to_string(y) + " " + to_string(w) + " " + to_string(h) + " ");
 			if (confidence >= minConfidence && (objectToActionMap.count(objectName)))
 				objectToActionMap.at(objectName)(car);
 			else
@@ -165,10 +161,8 @@ void Camera::processCNNFilesLoop(
 ) {
 	while (onCnn) {
 		string latestFile = globalPrint.getLatestFile(rcnnDataPath);
-
 		if (!latestFile.empty()) {
 			processDetectionFile(latestFile, cnnObjectToActionMap, minConfidence, ref(car));
-
 			// מחיקת הקובץ לאחר עיבוד
 			if (remove(latestFile.c_str()) != 0) {
 				globalPrint.printError("Failed to delete file: " + latestFile);
@@ -179,7 +173,7 @@ void Camera::processCNNFilesLoop(
 		}
 		else {
 			// אין קובץ חדש – נחכה רגע
-			this_thread::sleep_for(chrono::seconds(1));
+			this_thread::sleep_for(chrono::milliseconds(100));
 		}
 	}
 }
@@ -190,12 +184,11 @@ void Camera::processYoloFilesLoop(
 	float minConfidence, 
 	Car& car
 ) {
-	while (onCnn) {
+	while (onyolo) {
 		string latestFile = globalPrint.getLatestFile(yoloDataPath);
 
 		if (!latestFile.empty()) {
 			processDetectionFile(latestFile, yoloObjectToActionMap, minConfidence, ref(car));
-
 			// מחיקת הקובץ לאחר עיבוד
 			if (remove(latestFile.c_str()) != 0) {
 				globalPrint.printError("Failed to delete file: " + latestFile);
@@ -206,7 +199,7 @@ void Camera::processYoloFilesLoop(
 		}
 		else {
 			// אין קובץ חדש – נחכה רגע
-			this_thread::sleep_for(chrono::seconds(1));
+			this_thread::sleep_for(chrono::milliseconds(100));
 		}
 	}
 }

@@ -78,7 +78,7 @@ void EKF::updateIMU(float ax, float yaw_rate) {
     update(z, H_imu, R_imu);
 }
 
-// פונקציית עדכון כללית – מבצעת את שלב המדידה של המס
+// פונקציית עדכון כללית – מבצעת את שלב המדידה של המסנן
 void EKF::update(const VectorXf& z, const MatrixXf& H, const MatrixXf& R) {
     unique_lock<shared_mutex> lock(updateMutex);
     VectorXf y = z - H * x;

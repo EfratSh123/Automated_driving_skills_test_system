@@ -6,7 +6,7 @@
 #include <algorithm>
 
 using json = nlohmann::json;
-const std::string DrivingRoute::apiKey_ = "XXX";
+const std::string DrivingRoute::apiKey_ = "AIzaSyApzolRLg1hjNETX_E9DeJD8F82IBXBzUE";
 
 void DrivingRoute::getDirections(const std::string& origin, const std::string& destination) {
     std::string url = "https://maps.googleapis.com/maps/api/directions/json"
@@ -28,12 +28,8 @@ void DrivingRoute::getDirections(const std::string& origin, const std::string& d
     }
 
     json response = json::parse(r.text);
-    if (!response["status"].is_string()) {
-        globalPrint.printError("Google API Error: status field is not a string");
-        return;
-    }
-    if (response["status"] != "OK") {
-        globalPrint.printError("Google API Error: " + response["status"].get<std::string>());
+    if (!response["status"].is_string() || response["status"] != "OK") {
+        globalPrint.printError("Google API Error");
         return;
     }
 
