@@ -74,7 +74,7 @@ Commercial use or redistribution is **prohibited**.
 ## Contact  
 - Email: efratShmueli5914@gmail.com  
 - GitHub: [EfratSh123](https://github.com/EfratSh123)  
-- LinkedIn: *[Add your LinkedIn link here]*  
+- LinkedIn: *https://www.linkedin.com/in/efratshmueli/*  
 
 ## Credits  
 - [LaneNet Lane Detection (IrohXu)](https://github.com/IrohXu/lanenet-lane-detection-pytorch/tree/main)  
